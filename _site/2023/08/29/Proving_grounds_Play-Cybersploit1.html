@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: CyberSploit1</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: CyberSploit1 | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: CyberSploit1" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/29/Proving_grounds_Play-Cybersploit1.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/29/Proving_grounds_Play-Cybersploit1.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-29T01:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: CyberSploit1" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-29T01:00:00+05:30","datePublished":"2023-08-29T01:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: CyberSploit1","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/29/Proving_grounds_Play-Cybersploit1.html"},"url":"http://localhost:4000/2023/08/29/Proving_grounds_Play-Cybersploit1.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/29/Proving_grounds_Play-Cybersploit1.html">
+    <h2 class="post-title">Proving grounds Play: CyberSploit1</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 29, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 011bc8fe18712860846a9f303511663d (DSA)
+|   2048 d95314a37f9951403f49efef7f8b35de (RSA)
+|_  256 ef435bd0c0ebee3e76615c6dce15fe7e (ECDSA)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+|_http-title: Hello Pentester!
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.2.22 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port--80">Web Port : 80</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/web.png" alt="img" /></p>
+
+<h2 id="fuzzing">Fuzzing</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/files.png" alt="img" /></p>
+
+<p><strong>SSH Password found on robots.txt file</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/flag1.png" alt="img" /></p>
+
+<p>Decode the base64 text to get the SSH password.</p>
+
+<h2 id="initial-foothold">Initial Foothold</h2>
+
+<p>Since we have the username, password and PORT 22 <code class="language-plaintext highlighter-rouge">SSH</code> is open, SSH to the attacking machine using the same.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/ssh.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/kernel.png" alt="img" /></p>
+
+<p>The linux kernel in the attacking machine is vulnerable to <a href="https://www.exploit-db.com/exploits/37292">Linux Kernel 3.13.0 &lt; 3.19 (Ubuntu 12.04/14.04/14.10/15.04) - ‘overlayfs’ Local Privilege Escalation</a> vulnerability.</p>
+
+<p>Download the exploit code to the local machine and use python http server to download the exploit to the remote machine.</p>
+
+<p>Run the following to obtain root shell.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc exploit.c
+./a.out
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Cybersploit1/root.png" alt="img" /></p>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

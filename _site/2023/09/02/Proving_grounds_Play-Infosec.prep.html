@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Infosecprep</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Infosecprep | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Infosecprep" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/02/Proving_grounds_Play-Infosec.prep.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/02/Proving_grounds_Play-Infosec.prep.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-02T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Infosecprep" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-02T02:00:00+05:30","datePublished":"2023-09-02T02:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Infosecprep","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/02/Proving_grounds_Play-Infosec.prep.html"},"url":"http://localhost:4000/2023/09/02/Proving_grounds_Play-Infosec.prep.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/02/Proving_grounds_Play-Infosec.prep.html">
+    <h2 class="post-title">Proving grounds Play: Infosecprep</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 2, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   3072 91ba0dd43905e31355578f1b4690dbe4 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 0f35d1a131f2f6aa75e81701e71ed1d5 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 aff153ea7b4dd7fad8de0df228fc86d7 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp    open  http    Apache httpd 2.4.41 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.41 <span class="o">(</span>Ubuntu<span class="o">)</span>
+| http-robots.txt: 1 disallowed entry 
+|_/secret.txt
+|_http-title: OSCP Voucher &amp;#8211<span class="p">;</span> Just another WordPress site
+|_http-generator: WordPress 5.4.2
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+33060/tcp open  mysqlx?
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, LDAPSearchReq, NotesRPC, SSLSessionReq, TLSSessionReq, X11Probe, afp: 
+|     Invalid message<span class="s2">"
+|_    HY000
+</span></code></pre></div></div>
+
+<h2 id="web">Web</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Infosecprep/web.png" alt="img" /></p>
+
+<p>Nmap scan shows there is disallowed entry present in the robots.txt file <code class="language-plaintext highlighter-rouge">/secret.txt</code>.</p>
+
+<h3 id="base64-encoded-text">Base64 encoded text</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Infosecprep/enc-ssh.png" alt="img" /></p>
+
+<h3 id="decoded-text">Decoded text</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Infosecprep/ssh-key.png" alt="img" /></p>
+
+<p>Save the decoded SSH key as <code class="language-plaintext highlighter-rouge">id_rsa</code> and apply neccessary permission as <code class="language-plaintext highlighter-rouge">chmod 600</code>.</p>
+
+<h2 id="enumerate-ssh-login-user">Enumerate SSH Login user</h2>
+
+<p>As mentioned in the blog post by the author there is only one user in the system that is <code class="language-plaintext highlighter-rouge">oscp</code>.</p>
+
+<p>SSH to <code class="language-plaintext highlighter-rouge">oscp</code> user using the SSH key.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Infosecprep/user.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Check the permissions for the <code class="language-plaintext highlighter-rouge">/bin/bash</code> binary, which has the setuid bit configured that is <code class="language-plaintext highlighter-rouge">s</code> instead of <code class="language-plaintext highlighter-rouge">x</code> in permissions list.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-bash-5</span>.0<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-al</span> /bin/bash
+<span class="nt">-rwsr-sr-x</span> 1 root root 1183448 Feb 25  2020 /bin/bash
+</code></pre></div></div>
+
+<p><strong>What does setuid bit do?</strong></p>
+
+<p>The setuid bit simply indicates that when running the executable, it will set its permissions to that of the owner, instead of setting it to the user who launched it.</p>
+
+<p>In that case the owner is the root user so we can simply run <code class="language-plaintext highlighter-rouge">/bin/bash -p</code> to obtain root access.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Infosecprep/root.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

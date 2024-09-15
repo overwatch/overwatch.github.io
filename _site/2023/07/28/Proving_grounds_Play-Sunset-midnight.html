@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: SunsetMidnight</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: SunsetMidnight | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: SunsetMidnight" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/07/28/Proving_grounds_Play-Sunset-midnight.html" />
+<meta property="og:url" content="http://localhost:4000/2023/07/28/Proving_grounds_Play-Sunset-midnight.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-28T10:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: SunsetMidnight" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-07-28T10:00:00+05:30","datePublished":"2023-07-28T10:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: SunsetMidnight","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/07/28/Proving_grounds_Play-Sunset-midnight.html"},"url":"http://localhost:4000/2023/07/28/Proving_grounds_Play-Sunset-midnight.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/07/28/Proving_grounds_Play-Sunset-midnight.html">
+    <h2 class="post-title">Proving grounds Play: SunsetMidnight</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Jul 28, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">NMAP</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+80/tcp   open  http    Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+|_http-title: Did not follow redirect to http://sunset-midnight/
+| http-robots.txt: 1 disallowed entry 
+|_/wp-admin/
+3306/tcp open  mysql   MySQL 5.5.5-10.3.22-MariaDB-0+deb10u1
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.5.5-10.3.22-MariaDB-0+deb10u1
+</code></pre></div></div>
+
+<h2 id="fuzzing">Fuzzing</h2>
+<h2 id="files">Files</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">********************************************************</span>
+<span class="k">*</span> Wfuzz 3.1.0 - The Web Fuzzer                         <span class="k">*</span>
+<span class="k">********************************************************</span>
+
+Target: http://sunset-midnight/FUZZ
+Total requests: 37050
+
+<span class="o">=====================================================================</span>
+ID           Response   Lines    Word       Chars       Payload                     
+<span class="o">=====================================================================</span>
+
+000000005:   405        0 L      6 W        42 Ch       <span class="s2">"xmlrpc.php"</span>                
+000000036:   200        87 L     300 W      4869 Ch     <span class="s2">"wp-login.php"</span>              
+000000130:   200        97 L     823 W      7278 Ch     <span class="s2">"readme.html"</span>               
+000000206:   200        384 L    3177 W     19915 Ch    <span class="s2">"license.txt"</span>               
+000000248:   200        3 L      6 W        67 Ch       <span class="s2">"robots.txt"</span>                
+000000263:   200        0 L      0 W        0 Ch        <span class="s2">"wp-config.php"</span>                            
+000000413:   200        0 L      0 W        0 Ch        <span class="s2">"wp-cron.php"</span>                             
+000000462:   200        11 L     24 W       228 Ch      <span class="s2">"wp-links-opml.php"</span>                           
+000000838:   200        0 L      0 W        0 Ch        <span class="s2">"wp-load.php"</span>               
+</code></pre></div></div>
+
+<h2 id="brute-forcing-mysql-credentials">Brute Forcing Mysql Credentials</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/hydra.png" alt="img" /></p>
+
+<h2 id="logging-into-mysql-db">Logging into Mysql DB</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/db1.png" alt="img" /></p>
+
+<p>Get user credentials.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/db2.png" alt="img" /></p>
+
+<p>Generate new password MD5  hash.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/md51.png" alt="img" /></p>
+
+<p>Update user password.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/db3.png" alt="img" /></p>
+
+<p>Sucessfuly logged into wordpress admin portal.</p>
+
+<h2 id="uploading-reverse-shell-in-themes">Uploading Reverse Shell in themes</h2>
+
+<p>Uploading revershell in the themes resulted in failure.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/rev_upload_failed.png" alt="img" /></p>
+
+<h3 id="generate-malicious-wordpress-plugin">Generate Malicious wordpress plugin</h3>
+
+<p><a href="https://github.com/wetw0rk/malicious-wordpress-plugin">GitHub</a></p>
+
+<p>The python code allows to create malicious reverse shell payload and write it to the zip file.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/malicious_plugin_gen.png" alt="img" /></p>
+
+<p>Upload and install the malicious plugin</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/upload_plugin.png" alt="img" /></p>
+
+<h3 id="trigger-reverse-shell">Trigger reverse shell</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/shell_trigger.png" alt="img" /></p>
+
+<p>Shell obtained</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/stable_shell0.png" alt="img" /></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/stable_shell.png" alt="img" /></p>
+
+<p>Post obtaining shell, hardcoded user credentials were found in the wordpress config files.</p>
+
+<p>Found credentials for user <code class="language-plaintext highlighter-rouge">jose</code></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/wp-config.png" alt="img" /></p>
+
+<p><strong>SSH to user jose</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/jose.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<h3 id="suids">SUIDs</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/SUID.png" alt="img" /></p>
+
+<p>The status binary in the SUID runs services.</p>
+
+<ul>
+  <li>Create a service</li>
+  <li>Apply executable permission</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">/usr/bin/status</code> binary</li>
+</ul>
+
+<p><strong>Service file contents</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/bin/sh
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sunset-midnight/root.png" alt="img" /></p>
+
+<p><strong>Root obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

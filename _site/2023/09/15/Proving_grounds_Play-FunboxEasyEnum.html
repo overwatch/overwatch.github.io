@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: FunboxEasyEnum</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: FunboxEasyEnum | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: FunboxEasyEnum" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/15/Proving_grounds_Play-FunboxEasyEnum.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/15/Proving_grounds_Play-FunboxEasyEnum.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-15T01:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: FunboxEasyEnum" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-15T01:00:00+05:30","datePublished":"2023-09-15T01:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: FunboxEasyEnum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/15/Proving_grounds_Play-FunboxEasyEnum.html"},"url":"http://localhost:4000/2023/09/15/Proving_grounds_Play-FunboxEasyEnum.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/15/Proving_grounds_Play-FunboxEasyEnum.html">
+    <h2 class="post-title">Proving grounds Play: FunboxEasyEnum</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 15, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 9c52325b8bf638c77fa1b704854954f3 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 d6135606153624ad655e7aa18ce564f4 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 1ba9f35ad05183183a23ddc4a9be59f0 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp open  http    Apache httpd 2.4.29 <span class="o">((</span>Ubuntu<span class="o">))</span>
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-title: Apache2 Ubuntu Default Page: It works
+|_http-server-header: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port-80">Web PORT: 80</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://192.168.177.132/mini.php
+</code></pre></div></div>
+
+<h2 id="upload-reverse-shell">Upload reverse shell</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxEasyEnum/web.png" alt="img" /></p>
+
+<p>Trigger reverse shell by visiting <code class="language-plaintext highlighter-rouge">192.168.177.132/shell.php</code> URL.</p>
+
+<p><strong>Initial Foothold obtained</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxEasyEnum/shell.png" alt="img" /></p>
+
+<h2 id="user-enumeration">User Enumeration</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>goat
+harry
+karla
+oracle
+sally
+</code></pre></div></div>
+
+<p>The above are the list of users who have home directory in the machine. The user <code class="language-plaintext highlighter-rouge">goat</code> has the password configured as same as username <code class="language-plaintext highlighter-rouge">goat</code>.</p>
+
+<p>SSH to the user <code class="language-plaintext highlighter-rouge">goat</code> or switch user.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Enumerate executable permissions for the user goat.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t@funbox7:~<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>goat on funbox7:
+    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+
+User goat may run the following commands on funbox7:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/bin/mysql
+</code></pre></div></div>
+
+<p>Search for sudo exploit on GTFOBins for <code class="language-plaintext highlighter-rouge">mysql</code>.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxEasyEnum/gtfo.png" alt="img" /></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxEasyEnum/root.png" alt="img" /></p>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

